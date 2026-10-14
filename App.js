@@ -14,10 +14,6 @@ Books.forEach(function (Book, BookIndex) {
   });
 });
 
-function PageName(Index) {
-  return "Page" + (Index + 1) + ".png";
-}
-
 function FindByHash() {
   var Match = /^#(Book\d+Chapter\d+)$/.exec(location.hash);
   if (!Match) return -1;
@@ -116,8 +112,9 @@ function RenderHome() {
       var Row = Make("a", "Row");
       Row.href = "#" + Entry.Key;
       Row.appendChild(Make("span", "RowTitle", Chapter.Title));
-      var Meta = Make("span", "RowMeta", Chapter.Pages + (Chapter.Pages === 1 ? " page" : " pages"));
-      Row.appendChild(Meta);
+      if (Chapter.Pages) {
+        Row.appendChild(Make("span", "RowMeta", Chapter.Pages + (Chapter.Pages === 1 ? " page" : " pages")));
+      }
       List.appendChild(Row);
       var Counts = Make("span", "RowCounts", "");
       Row.appendChild(Counts);
@@ -153,6 +150,33 @@ function AddComments(Entry) {
   App.appendChild(Box);
 }
 
+function LoadPages(Reader, Chapter, PageIndex, ChapterIndex) {
+  if (FindByHash() !== ChapterIndex) return;
+  if (Chapter.Pages && PageIndex >= Chapter.Pages) return;
+  var Candidates = [];
+  ["page", "Page"].forEach(function (Prefix) {
+    ["png", "jpg", "jpeg", "webp"].forEach(function (Extension) {
+      Candidates.push(Chapter.Folder + "/" + Prefix + (PageIndex + 1) + "." + Extension);
+    });
+  });
+  var Tried = 0;
+  var Img = document.createElement("img");
+  Img.alt = Chapter.Title + " page " + (PageIndex + 1);
+  Img.onload = function () {
+    Reader.appendChild(Img);
+    LoadPages(Reader, Chapter, PageIndex + 1, ChapterIndex);
+  };
+  Img.onerror = function () {
+    Tried++;
+    if (Tried < Candidates.length) {
+      Img.src = Candidates[Tried];
+    } else if (PageIndex === 0) {
+      Reader.appendChild(Make("div", "Empty", "No pages here yet."));
+    }
+  };
+  Img.src = Candidates[0];
+}
+
 function RenderChapter(Index) {
   var Entry = All[Index];
   var Chapter = Entry.Chapter;
@@ -176,14 +200,8 @@ function RenderChapter(Index) {
   App.appendChild(Title);
 
   var Reader = Make("div", "Reader");
-  for (var I = 0; I < Chapter.Pages; I++) {
-    var Img = document.createElement("img");
-    Img.src = Chapter.Folder + "/" + PageName(I);
-    Img.alt = Chapter.Title + " page " + (I + 1);
-    Img.loading = I < 2 ? "eager" : "lazy";
-    Reader.appendChild(Img);
-  }
   App.appendChild(Reader);
+  LoadPages(Reader, Chapter, 0, Index);
 
   var Foot = Make("div", "Foot");
   Foot.appendChild(Link("Previous chapter", PrevHref, HasPrev ? "" : "Off"));

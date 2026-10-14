@@ -12,7 +12,7 @@ var Books = [
     Title: "Book 1: The Philosopher's Stone",
     OriginalUrl: "",
     Chapters: [
-      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1", Pages: 1 }
+      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Chapter1" }
     ]
   }
 ];

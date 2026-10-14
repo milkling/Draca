@@ -12,7 +12,8 @@ var Books = [
     Title: "Book 1: The Philosopher's Stone",
     OriginalUrl: "https://www.wattpad.com/story/417160307-draca-malfoy-and-the-philosopher%27s-stone",
     Chapters: [
-      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1" }
+      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1" },
+       { Title: "Chapter 2: Hogwarts Express", Folder: "Chapters/Book1/Chapter2" }
     ]
   }
 ];

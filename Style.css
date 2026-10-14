@@ -1,0 +1,150 @@
+:root {
+  --Bg: #ffffff;
+  --Fg: #1a1a1f;
+  --Soft: #6a6a75;
+  --Line: #e4e4ea;
+  --Accent: #2a6b4a;
+  --Card: #f5f5f8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --Bg: #121216;
+    --Fg: #ececf1;
+    --Soft: #9a9aa6;
+    --Line: #2a2a32;
+    --Accent: #6fcf9b;
+    --Card: #1b1b21;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--Bg);
+  color: var(--Fg);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+a { color: inherit; text-decoration: none; }
+.Top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--Bg);
+  border-bottom: 1px solid var(--Line);
+}
+.Brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.Nav { display: flex; gap: 8px; }
+.Btn {
+  padding: 6px 12px;
+  border: 1px solid var(--Line);
+  border-radius: 8px;
+  background: var(--Card);
+  color: var(--Fg);
+  font-size: 14px;
+  cursor: pointer;
+}
+.Btn.Off { opacity: 0.35; pointer-events: none; }
+.Home {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+.Hero {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.Cover {
+  width: 180px;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--Line);
+}
+.HeroText { flex: 1; min-width: 200px; }
+.HeroText h1 { margin: 0 0 8px; font-size: 32px; }
+.HeroText p { margin: 0 0 16px; color: var(--Soft); }
+.Start {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--Accent);
+  color: #fff;
+  font-weight: 600;
+}
+.List { display: flex; flex-direction: column; gap: 8px; }
+.Row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1px solid var(--Line);
+  border-radius: 10px;
+  background: var(--Card);
+}
+.Row:hover { border-color: var(--Accent); }
+.Row span:last-child { color: var(--Soft); font-size: 14px; }
+.Reader {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.Reader img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ReaderTitle {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 16px 12px;
+  font-weight: 600;
+}
+.Foot {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.Empty { padding: 48px 16px; text-align: center; color: var(--Soft); }
+.Comments {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+}
+.Actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.Original {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--Line);
+  background: var(--Card);
+  font-weight: 600;
+}
+.Original:hover { border-color: var(--Accent); }
+.Book { margin-bottom: 32px; }
+.BookHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.BookHead h2 { margin: 0; font-size: 20px; }
+.BookLink { font-size: 14px; color: var(--Accent); }
+.Row { flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.RowTitle { font-weight: 600; }
+.RowMeta { color: var(--Soft); font-size: 14px; margin-left: auto; }
+.RowCounts { flex-basis: 100%; color: var(--Soft); font-size: 13px; }
+.RowCounts:empty { display: none; }
+.BookName { color: var(--Soft); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
+.ChapterName { font-size: 20px; font-weight: 700; }
+.ChapterCounts { color: var(--Soft); font-size: 13px; margin-top: 4px; }
+.ChapterCounts:empty { display: none; }

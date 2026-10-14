@@ -99,7 +99,113 @@ function LoadCounts(Entry, Target) {
   });
 }
 
+var MusicAudio = null;
+var MusicSrc = "";
+var MusicButton = null;
+var MusicBlocked = false;
+
+function MusicWanted() {
+  return StorageGet("MusicOn") !== "0";
+}
+
+function FadeAudio(Target, Level, Duration, Done) {
+  var Start = Target.volume;
+  var Begin = Date.now();
+  function Tick() {
+    var Progress = Math.min((Date.now() - Begin) / Duration, 1);
+    Target.volume = Math.max(0, Math.min(1, Start + (Level - Start) * Progress));
+    if (Progress < 1) setTimeout(Tick, 40);
+    else if (Done) Done();
+  }
+  Tick();
+}
+
+function UpdateMusicButton() {
+  if (!MusicButton) return;
+  var On = MusicWanted() && !MusicBlocked;
+  MusicButton.textContent = On ? "\u266a On" : "\u266a Off";
+  MusicButton.className = "MusicButton" + (On ? " On" : "");
+}
+
+function StopMusic() {
+  if (MusicAudio) {
+    var Old = MusicAudio;
+    MusicAudio = null;
+    FadeAudio(Old, 0, 800, function () { Old.pause(); });
+  }
+  MusicSrc = "";
+}
+
+function PlayMusic(Src, Volume) {
+  if (Src === MusicSrc) return;
+  StopMusic();
+  MusicSrc = Src;
+  if (!Src) return;
+  var Track = new Audio(Src);
+  Track.loop = true;
+  Track.volume = 0;
+  MusicAudio = Track;
+  if (!MusicWanted()) return;
+  Track.play().then(function () {
+    MusicBlocked = false;
+    UpdateMusicButton();
+    FadeAudio(Track, Volume || 0.5, 1500);
+  }).catch(function () {
+    MusicBlocked = true;
+    UpdateMusicButton();
+  });
+}
+
+function ShowMusicButton(Visible) {
+  if (!MusicButton) {
+    MusicButton = document.createElement("button");
+    MusicButton.onclick = function () {
+      if (MusicBlocked) {
+        MusicBlocked = false;
+        StorageSet("MusicOn", "1");
+        var Pending = MusicSrc;
+        MusicSrc = "";
+        PlayMusic(Pending, PendingVolume);
+      } else if (MusicWanted()) {
+        StorageSet("MusicOn", "0");
+        if (MusicAudio) FadeAudio(MusicAudio, 0, 400, function () { if (MusicAudio) MusicAudio.pause(); });
+      } else {
+        StorageSet("MusicOn", "1");
+        if (MusicAudio) {
+          var Resume = MusicAudio;
+          Resume.play().then(function () { FadeAudio(Resume, PendingVolume, 800); }).catch(function () {
+            MusicBlocked = true;
+            UpdateMusicButton();
+          });
+        }
+      }
+      UpdateMusicButton();
+    };
+    document.body.appendChild(MusicButton);
+  }
+  MusicButton.hidden = !Visible;
+  UpdateMusicButton();
+}
+
+var PendingVolume = 0.5;
+
+function WatchMusic(Img, Chapter, PageIndex, ChapterIndex) {
+  if (!Chapter.Music || !("IntersectionObserver" in window)) return;
+  var Cue = Chapter.Music.filter(function (Item) { return Item.Page === PageIndex + 1; })[0];
+  if (!Cue) return;
+  var Watcher = new IntersectionObserver(function (Entries) {
+    if (!Entries[0].isIntersecting) return;
+    if (FindByHash() !== ChapterIndex) { Watcher.disconnect(); return; }
+    PendingVolume = Cue.Volume || 0.5;
+    PlayMusic(Cue.Src, PendingVolume);
+    Watcher.disconnect();
+  }, { threshold: 0.25 });
+  Watcher.observe(Img);
+}
+
 function RenderHome() {
+  StopMusic();
+  ShowMusicButton(false);
   HomeStats = null;
   document.title = SiteInfo.Title;
   Nav.innerHTML = "";
@@ -196,6 +302,7 @@ function LoadPages(Reader, Chapter, PageIndex, ChapterIndex) {
   Img.alt = Chapter.Title + " page " + (PageIndex + 1);
   Img.onload = function () {
     Reader.appendChild(Img);
+    WatchMusic(Img, Chapter, PageIndex, ChapterIndex);
     LoadPages(Reader, Chapter, PageIndex + 1, ChapterIndex);
   };
   Img.onerror = function () {
@@ -222,6 +329,8 @@ function RenderChapter(Index) {
   Nav.appendChild(Link("Chapters", "#", ""));
   Nav.appendChild(Link("Next", NextHref, HasNext ? "" : "Off"));
 
+  StopMusic();
+  ShowMusicButton(!!Chapter.Music);
   App.innerHTML = "";
   var Title = Make("div", "ReaderTitle");
   Title.appendChild(Make("div", "BookName", Entry.Book.Title));

@@ -228,14 +228,9 @@ var UpdateBaseline = null;
 var UpdateShown = false;
 
 async function ReadSiteSignature() {
-  var Response = await fetch("Chapters.js?Check=" + Date.now(), { cache: "no-store" });
+  var Response = await fetch("Version.json?Check=" + Date.now(), { cache: "no-store" });
   if (!Response.ok) return null;
-  var Text = await Response.text();
-  var Hash = 0;
-  for (var Index = 0; Index < Text.length; Index++) {
-    Hash = (Hash * 31 + Text.charCodeAt(Index)) | 0;
-  }
-  return Text.length + ":" + Hash;
+  return await Response.text();
 }
 
 function ShowUpdateBanner() {

@@ -4,7 +4,7 @@ var SiteInfo = {
   Cover: "Cover.png",
   OriginalText: "Read the original novel on Wattpad",
   OriginalUrl: "https://www.wattpad.com/user/IUSarde",
-  Giscus: { Repo: "", RepoId: "", Category: "", CategoryId: "" }
+  Giscus: { Repo: "milkling/Draca", RepoId: "R_kgDOVJ6uoQ", Category: "Announcements", CategoryId: "DIC_kwDOVJ6uoc4DIc3i" }
 };
 
 var Books = [

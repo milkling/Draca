@@ -47,25 +47,27 @@ function OriginalLink(Url, ClassName) {
 }
 
 function CountsText(Data) {
-  var Comments = Data.totalCommentCount || 0;
-  var Likes = Data.reactionCount || 0;
-  return Comments + (Comments === 1 ? " comment" : " comments") + " · " + Likes + (Likes === 1 ? " like" : " likes");
+  var Comments = Data.c || 0;
+  var Likes = Data.r || 0;
+  return Comments + (Comments === 1 ? " comment" : " comments") + " \u00b7 " + Likes + (Likes === 1 ? " like" : " likes");
+}
+
+var CountsPromise = null;
+
+function GetCounts() {
+  if (!CountsPromise) {
+    CountsPromise = fetch("Counts.json?t=" + Date.now())
+      .then(function (Response) { return Response.ok ? Response.json() : null; })
+      .catch(function () { return null; });
+  }
+  return CountsPromise;
 }
 
 function LoadCounts(Entry, Target) {
-  var Config = SiteInfo.Giscus;
-  if (!Config || !Config.Repo || !Config.Category) return;
-  var Url = "https://giscus.app/api/discussions?repo=" + encodeURIComponent(Config.Repo) +
-    "&term=" + encodeURIComponent(Entry.Key) +
-    "&category=" + encodeURIComponent(Config.Category) +
-    "&number=0&strict=false";
-  fetch(Url)
-    .then(function (Response) { return Response.json(); })
-    .then(function (Body) {
-      if (Body && Body.discussion) Target.textContent = CountsText(Body.discussion);
-      else Target.textContent = "0 comments · 0 likes";
-    })
-    .catch(function () { Target.textContent = ""; });
+  GetCounts().then(function (Counts) {
+    if (!Counts) { Target.textContent = ""; return; }
+    Target.textContent = CountsText(Counts[Entry.Key] || {});
+  });
 }
 
 function RenderHome() {

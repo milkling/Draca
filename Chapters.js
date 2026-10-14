@@ -14,8 +14,8 @@ var Books = [
     Chapters: [
       { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1" },
       { Title: "Chapter 2: Hogwarts Express", Folder: "Chapters/Book1/Chapter2" },
-      { Title: "Chapter 3: The Sorting Hat", Folder: "Chapters/Book1/Chapter3" }
-      { Title: "Chapter 4: The Flying Lessons", Folder: "Chapters/Book1/Chapter4" }
+      { Title: "Chapter 3: The Sorting Hat", Folder: "Chapters/Book1/Chapter3" },
+      { Title: "Chapter 4: The Flying Lessons", Folder: "Chapters/Book1/Chapter4" },
     ]
   },
   {

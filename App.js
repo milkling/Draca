@@ -223,3 +223,54 @@ function Route() {
 
 window.addEventListener("hashchange", Route);
 Route();
+
+var UpdateBaseline = null;
+var UpdateShown = false;
+
+async function ReadSiteSignature() {
+  var Response = await fetch("Chapters.js?Check=" + Date.now(), { cache: "no-store" });
+  if (!Response.ok) return null;
+  var Text = await Response.text();
+  var Hash = 0;
+  for (var Index = 0; Index < Text.length; Index++) {
+    Hash = (Hash * 31 + Text.charCodeAt(Index)) | 0;
+  }
+  return Text.length + ":" + Hash;
+}
+
+function ShowUpdateBanner() {
+  if (UpdateShown) return;
+  UpdateShown = true;
+  var Banner = document.createElement("div");
+  Banner.id = "UpdateBanner";
+  Banner.innerHTML = "<span>New update! Reload to see it.</span>";
+  var Button = document.createElement("button");
+  Button.textContent = "Reload";
+  Button.onclick = function () { location.reload(); };
+  var Close = document.createElement("button");
+  Close.textContent = "×";
+  Close.className = "Dismiss";
+  Close.onclick = function () { Banner.remove(); };
+  Banner.appendChild(Button);
+  Banner.appendChild(Close);
+  document.body.appendChild(Banner);
+}
+
+async function CheckForUpdate() {
+  try {
+    var Current = await ReadSiteSignature();
+    if (Current === null) return;
+    if (UpdateBaseline === null) {
+      UpdateBaseline = Current;
+      return;
+    }
+    if (Current !== UpdateBaseline) ShowUpdateBanner();
+  } catch (Error) {
+  }
+}
+
+CheckForUpdate();
+setInterval(CheckForUpdate, 60000);
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "visible") CheckForUpdate();
+});

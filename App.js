@@ -47,30 +47,60 @@ function OriginalLink(Url, ClassName) {
 }
 
 function CountsText(Data) {
-  var Comments = Data.c || 0;
-  var Likes = Data.r || 0;
-  return Comments + (Comments === 1 ? " comment" : " comments") + " \u00b7 " + Likes + (Likes === 1 ? " like" : " likes");
+  var Views = Data.v || 0;
+  var Likes = Data.l || 0;
+  return Views + (Views === 1 ? " view" : " views") + " \u00b7 " + Likes + (Likes === 1 ? " like" : " likes");
 }
 
-var CountsPromise = null;
+function ReadStats(Keys) {
+  return fetch("/api/Stats?keys=" + Keys.join(","), { cache: "no-store" })
+    .then(function (Response) { return Response.ok ? Response.json() : null; })
+    .catch(function () { return null; });
+}
 
-function GetCounts() {
-  if (!CountsPromise) {
-    CountsPromise = fetch("Counts.json?t=" + Date.now())
-      .then(function (Response) { return Response.ok ? Response.json() : null; })
-      .catch(function () { return null; });
+function PostStat(Key, Action) {
+  return fetch("/api/Stats", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key: Key, action: Action })
+  })
+    .then(function (Response) { return Response.ok ? Response.json() : null; })
+    .catch(function () { return null; });
+}
+
+function StorageGet(Name) {
+  try { return localStorage.getItem(Name); } catch (Failure) { return null; }
+}
+
+function StorageSet(Name, Value) {
+  try {
+    if (Value === null) localStorage.removeItem(Name);
+    else localStorage.setItem(Name, Value);
+  } catch (Failure) {
   }
-  return CountsPromise;
 }
+
+function SessionSeen(Name) {
+  try {
+    if (sessionStorage.getItem(Name)) return true;
+    sessionStorage.setItem(Name, "1");
+  } catch (Failure) {
+  }
+  return false;
+}
+
+var HomeStats = null;
 
 function LoadCounts(Entry, Target) {
-  GetCounts().then(function (Counts) {
-    if (!Counts) { Target.textContent = ""; return; }
-    Target.textContent = CountsText(Counts[Entry.Key] || {});
+  if (!HomeStats) HomeStats = ReadStats(All.map(function (Item) { return Item.Key; }));
+  HomeStats.then(function (Stats) {
+    if (!Stats) { Target.textContent = ""; return; }
+    Target.textContent = CountsText(Stats[Entry.Key] || {});
   });
 }
 
 function RenderHome() {
+  HomeStats = null;
   document.title = SiteInfo.Title;
   Nav.innerHTML = "";
   App.innerHTML = "";
@@ -198,7 +228,33 @@ function RenderChapter(Index) {
   Title.appendChild(Make("div", "ChapterName", Chapter.Title));
   var Counts = Make("div", "ChapterCounts", "");
   Title.appendChild(Counts);
-  LoadCounts(Entry, Counts);
+  var LikeName = "Liked" + Entry.Key;
+  var Liked = StorageGet(LikeName) === "1";
+  var LikeButton = Make("button", "LikeButton", "");
+  var Latest = { v: 0, l: 0 };
+  function ShowStats(Data) {
+    if (!Data) return;
+    Latest = Data;
+    Counts.textContent = CountsText(Data);
+  }
+  function ShowLike() {
+    LikeButton.textContent = Liked ? "\u2665 Liked" : "\u2661 Like";
+    LikeButton.className = "LikeButton" + (Liked ? " On" : "");
+  }
+  ShowLike();
+  LikeButton.onclick = function () {
+    Liked = !Liked;
+    StorageSet(LikeName, Liked ? "1" : null);
+    ShowLike();
+    ShowStats({ v: Latest.v, l: Math.max(0, Latest.l + (Liked ? 1 : -1)) });
+    PostStat(Entry.Key, Liked ? "like" : "unlike").then(ShowStats);
+  };
+  Title.appendChild(LikeButton);
+  if (SessionSeen("Viewed" + Entry.Key)) {
+    ReadStats([Entry.Key]).then(function (Stats) { if (Stats) ShowStats(Stats[Entry.Key]); });
+  } else {
+    PostStat(Entry.Key, "view").then(ShowStats);
+  }
   App.appendChild(Title);
 
   var Reader = Make("div", "Reader");

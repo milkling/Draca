@@ -59,8 +59,9 @@ function Publish(Item) {
 async function Cooldown(Context, Store, Seconds) {
   var Address = Context.request.headers.get("CF-Connecting-IP") || "unknown";
   var Mark = "r" + (await Hash(Address)).slice(0, 24);
-  if (await Store.get(Mark)) return false;
-  await Store.put(Mark, "1", { expirationTtl: Seconds });
+  var Last = parseInt(await Store.get(Mark), 10) || 0;
+  if (Date.now() - Last < Seconds * 1000) return false;
+  await Store.put(Mark, String(Date.now()), { expirationTtl: 60 });
   return true;
 }
 

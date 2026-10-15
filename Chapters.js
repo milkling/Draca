@@ -20,6 +20,7 @@ var Books = [
       { Title: "Chapter 6: The Midnight Duel", Folder: "Chapters/Book1/Chapter6", Date: "2026-10-15" },
       { Title: "Chapter 7: Norbert and the Forest", Folder: "Chapters/Book1/Chapter7", Date: "2026-10-15" },
       { Title: "Chapter 8: End of Year Dining Hall", Folder: "Chapters/Book1/Chapter8", Date: "2026-10-15" },
+      { Title: "Chapter 9: Home", Folder: "Chapters/Book1/Chapter9", Date: "2026-10-15" },
     ]
   },
   {

@@ -750,16 +750,29 @@ Route();
 
 var UpdateBaseline = null;
 var UpdateShown = false;
+var WatchedFiles = ["index.html", "App.js", "Chapters.js", "Style.css"];
 
-async function ReadSiteSignature() {
-  var Response = await fetch("Version.json?Check=" + Date.now(), { cache: "no-store" });
-  if (!Response.ok) return null;
-  return await Response.text();
+function HashText(Text) {
+  var Hash = 5381;
+  for (var I = 0; I < Text.length; I++) Hash = ((Hash * 33) ^ Text.charCodeAt(I)) >>> 0;
+  return Hash;
+}
+
+async function ReadSiteSignature(Fresh) {
+  var Parts = [];
+  for (var Name of WatchedFiles) {
+    var Url = Fresh ? Name + "?Check=" + Date.now() : Name;
+    var Response = await fetch(Url, { cache: Fresh ? "no-store" : "force-cache" });
+    if (!Response.ok) return null;
+    Parts.push(HashText(await Response.text()));
+  }
+  return Parts.join("-");
 }
 
 function ShowUpdateBanner() {
   if (UpdateShown) return;
   UpdateShown = true;
+  document.title = "(Update) " + document.title;
   var Banner = document.createElement("div");
   Banner.id = "UpdateBanner";
   Banner.innerHTML = "<span>New update! Reload to see it.</span>";
@@ -776,13 +789,14 @@ function ShowUpdateBanner() {
 }
 
 async function CheckForUpdate() {
+  if (UpdateShown) return;
   try {
-    var Current = await ReadSiteSignature();
-    if (Current === null) return;
     if (UpdateBaseline === null) {
-      UpdateBaseline = Current;
-      return;
+      UpdateBaseline = await ReadSiteSignature(false);
+      if (UpdateBaseline === null) return;
     }
+    var Current = await ReadSiteSignature(true);
+    if (Current === null) return;
     if (Current !== UpdateBaseline) ShowUpdateBanner();
   } catch (Error) {
   }
@@ -793,3 +807,4 @@ setInterval(CheckForUpdate, 60000);
 document.addEventListener("visibilitychange", function () {
   if (document.visibilityState === "visible") CheckForUpdate();
 });
+window.addEventListener("focus", CheckForUpdate);

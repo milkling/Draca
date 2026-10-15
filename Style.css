@@ -1,30 +1,41 @@
 :root {
-  --Bg: #ffffff;
-  --Fg: #1a1a1f;
-  --Soft: #6a6a75;
-  --Line: #e4e4ea;
-  --Accent: #2a6b4a;
-  --Card: #f5f5f8;
+  --Bg: #faf6ef;
+  --Fg: #2a2320;
+  --Soft: #7a6f68;
+  --Line: #e7ddd0;
+  --Accent: #8c2f39;
+  --Gold: #b88a3a;
+  --Card: #ffffff;
+  --Raised: #f3ece0;
+  --Shadow: 0 8px 24px rgba(60, 35, 20, 0.10);
+  --Display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --Bg: #121216;
-    --Fg: #ececf1;
-    --Soft: #9a9aa6;
-    --Line: #2a2a32;
-    --Accent: #6fcf9b;
-    --Card: #1b1b21;
+    --Bg: #15110f;
+    --Fg: #f1e9dc;
+    --Soft: #a89c90;
+    --Line: #2c2420;
+    --Accent: #e0a05a;
+    --Gold: #e0b96a;
+    --Card: #1e1815;
+    --Raised: #261e1a;
+    --Shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
   }
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   background: var(--Bg);
   color: var(--Fg);
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  line-height: 1.5;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+
 .Top {
   position: sticky;
   top: 0;
@@ -33,62 +44,180 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 12px 16px;
-  background: var(--Bg);
+  padding: 10px 18px;
+  background: color-mix(in srgb, var(--Bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--Line);
 }
-.Brand { font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.Brand {
+  font-family: var(--Display);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--Accent);
+}
 .Nav { display: flex; gap: 8px; }
 .Btn {
-  padding: 6px 12px;
+  padding: 7px 14px;
   border: 1px solid var(--Line);
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--Card);
   color: var(--Fg);
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
 }
+.Btn:hover { border-color: var(--Accent); transform: translateY(-1px); }
 .Btn.Off { opacity: 0.35; pointer-events: none; }
+
 .Home {
-  max-width: 720px;
+  max-width: 820px;
   margin: 0 auto;
-  padding: 32px 16px 64px;
+  padding: 0 16px 56px;
 }
 .Hero {
+  position: relative;
+  overflow: hidden;
+  margin: 18px 0 40px;
+  min-height: 300px;
+  border-radius: 22px;
   display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
+  align-items: flex-end;
+  box-shadow: var(--Shadow);
+  background: #1b1412;
 }
+.HeroBackdrop { position: absolute; inset: 0; }
 .Cover {
-  width: 180px;
-  max-width: 100%;
-  border-radius: 10px;
-  border: 1px solid var(--Line);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: saturate(1.05);
 }
-.HeroText { flex: 1; min-width: 200px; }
-.HeroText h1 { margin: 0 0 8px; font-size: 32px; }
-.HeroText p { margin: 0 0 16px; color: var(--Soft); }
-.Start {
+.Hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(14, 9, 8, 0.92) 0%, rgba(14, 9, 8, 0.55) 45%, rgba(14, 9, 8, 0.1) 100%);
+}
+.HeroText {
+  position: relative;
+  z-index: 1;
+  padding: 28px;
+  color: #f6eee2;
+  max-width: 560px;
+}
+.HeroKicker {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e0b96a;
+  margin-bottom: 4px;
+}
+.HeroText h1 {
+  margin: 0 0 6px;
+  font-family: var(--Display);
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.HeroText p { margin: 0 0 18px; color: #d9cdbd; }
+.Actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.Start, .Latest, .Original {
   display: inline-block;
-  padding: 10px 18px;
-  border-radius: 10px;
-  background: var(--Accent);
-  color: #fff;
+  padding: 10px 20px;
+  border-radius: 999px;
   font-weight: 600;
+  font-size: 14px;
+  transition: transform 0.15s, background 0.15s;
 }
-.List { display: flex; flex-direction: column; gap: 8px; }
+.Start { background: #e0b96a; color: #2a1c10; }
+.Start:hover { transform: translateY(-1px); background: #ecc87c; }
+.Latest, .Original {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #f6eee2;
+  backdrop-filter: blur(4px);
+}
+.Latest:hover, .Original:hover { background: rgba(255, 255, 255, 0.2); }
+
+.Book { margin-bottom: 44px; }
+.BookHead {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.BookCover {
+  width: 88px;
+  height: 118px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: var(--Shadow);
+  border: 1px solid var(--Line);
+  flex: none;
+}
+.BookHeadText { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.BookHead h2 {
+  margin: 0;
+  font-family: var(--Display);
+  font-size: 30px;
+  line-height: 1.1;
+}
+.BookCount { color: var(--Soft); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.BookLink { color: var(--Accent); font-size: 14px; font-weight: 500; margin-top: 4px; }
+.BookLink:hover { text-decoration: underline; }
+
+.List {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--Line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--Card);
+  box-shadow: var(--Shadow);
+}
 .Row {
   display: flex;
-  justify-content: space-between;
-  padding: 14px 16px;
-  border: 1px solid var(--Line);
-  border-radius: 10px;
-  background: var(--Card);
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px 10px 10px;
+  border-bottom: 1px solid var(--Line);
+  transition: background 0.15s;
 }
-.Row:hover { border-color: var(--Accent); }
-.Row span:last-child { color: var(--Soft); font-size: 14px; }
+.Row:last-child { border-bottom: 0; }
+.Row:hover { background: var(--Raised); }
+.Thumb {
+  width: 104px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--Raised);
+  flex: none;
+}
+.RowBody { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.RowTitle { font-weight: 600; font-size: 16px; }
+.RowDate { color: var(--Soft); font-size: 13px; }
+.RowCounts { color: var(--Soft); font-size: 12px; }
+.RowCounts:empty { display: none; }
+.RowNum {
+  color: var(--Soft);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+.SiteFoot {
+  text-align: center;
+  color: var(--Soft);
+  font-size: 13px;
+  padding-top: 8px;
+  letter-spacing: 0.06em;
+}
+
 .Reader {
   max-width: 720px;
   margin: 0 auto;
@@ -101,64 +230,193 @@ a { color: inherit; text-decoration: none; }
 .ReaderTitle {
   max-width: 720px;
   margin: 0 auto;
-  padding: 20px 16px 12px;
-  font-weight: 600;
+  padding: 26px 16px 18px;
+  text-align: center;
 }
+.BookName {
+  color: var(--Soft);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+.ChapterName {
+  font-family: var(--Display);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-top: 4px;
+}
+.ChapterDate { color: var(--Soft); font-size: 13px; margin-top: 6px; }
+.ChapterCounts { color: var(--Soft); font-size: 13px; margin-top: 2px; }
+.ChapterCounts:empty { display: none; }
+.LikeButton {
+  margin-top: 14px;
+  padding: 8px 18px;
+  border: 1px solid var(--Line);
+  border-radius: 999px;
+  background: var(--Card);
+  color: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.LikeButton:hover { transform: translateY(-1px); }
+.LikeButton.On { background: #c0392b; border-color: #c0392b; color: #fff; }
+
 .Foot {
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 16px 32px;
+  padding: 28px 16px 32px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px;
 }
 .Empty { padding: 48px 16px; text-align: center; color: var(--Soft); }
+
 .Comments {
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 16px 64px;
+  padding: 8px 16px 72px;
 }
-.Actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.Original {
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid var(--Line);
-  background: var(--Card);
-  font-weight: 600;
+.CommentsHead {
+  margin: 0 0 14px;
+  font-family: var(--Display);
+  font-size: 28px;
+  border-top: 1px solid var(--Line);
+  padding-top: 26px;
 }
-.Original:hover { border-color: var(--Accent); }
-.Book { margin-bottom: 32px; }
-.BookHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.BookHead h2 { margin: 0; font-size: 20px; }
-.BookLink { font-size: 14px; color: var(--Accent); }
-.Row { flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
-.RowTitle { font-weight: 600; }
-.RowMeta { color: var(--Soft); font-size: 14px; margin-left: auto; }
-.RowCounts { flex-basis: 100%; color: var(--Soft); font-size: 13px; }
-.RowCounts:empty { display: none; }
-.BookName { color: var(--Soft); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
-.ChapterName { font-size: 20px; font-weight: 700; }
-.ChapterCounts { color: var(--Soft); font-size: 13px; margin-top: 4px; }
-.ChapterCounts:empty { display: none; }
-
-.LikeButton {
-  margin-top: 10px;
-  padding: 8px 16px;
-  border: 1px solid var(--Line, #d8d8de);
-  border-radius: 999px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+.CommentAccount { margin-bottom: 12px; font-size: 14px; color: var(--Soft); }
+.CommentLine { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+.CommentLine strong { color: var(--Fg); }
+.CommentLink {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--Accent);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
-.LikeButton.On { background: #c0392b; border-color: #c0392b; color: #fff; }
+.CommentLink:hover { text-decoration: underline; }
+.CommentJoin { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.CommentInput {
+  flex: 1;
+  min-width: 140px;
+  padding: 9px 12px;
+  border: 1px solid var(--Line);
+  border-radius: 10px;
+  background: var(--Card);
+  color: var(--Fg);
+  font: inherit;
+}
+.CommentInput:focus, .CommentField:focus { outline: 2px solid var(--Accent); outline-offset: 1px; }
+.CommentField {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--Line);
+  border-radius: 12px;
+  background: var(--Card);
+  color: var(--Fg);
+  font: inherit;
+  resize: vertical;
+}
+.CommentBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+.CommentStatus { font-size: 13px; color: var(--Soft); flex: 1; }
+.CommentStatus.Bad { color: #c0392b; }
+.CommentSubmit {
+  padding: 9px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--Accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, opacity 0.15s;
+}
+@media (prefers-color-scheme: dark) {
+  .CommentSubmit { color: #1b1208; }
+}
+.CommentSubmit:hover { transform: translateY(-1px); }
+.CommentSubmit:disabled { opacity: 0.5; cursor: default; transform: none; }
+.CommentList { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+.CommentItem {
+  padding: 12px 14px;
+  border: 1px solid var(--Line);
+  border-radius: 12px;
+  background: var(--Card);
+}
+.CommentTop { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.CommentName { font-weight: 700; font-size: 14px; }
+.CommentName.Member { color: var(--Accent); }
+.CommentTime { color: var(--Soft); font-size: 12px; }
+.CommentRemove {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--Soft);
+  font-size: 12px;
+  cursor: pointer;
+}
+.CommentRemove:hover { color: #c0392b; }
+.CommentText { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; }
+.CommentEmpty { color: var(--Soft); font-size: 14px; padding: 8px 0; }
 
+.MusicButton {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 6;
+  padding: 9px 16px;
+  border: 1px solid var(--Line);
+  border-radius: 999px;
+  background: var(--Card);
+  color: var(--Fg);
+  font-weight: 600;
+  box-shadow: var(--Shadow);
+  cursor: pointer;
+}
+.MusicButton.On { border-color: var(--Accent); color: var(--Accent); }
+
+#UpdateBanner {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--Fg);
+  color: var(--Bg);
+  box-shadow: var(--Shadow);
+  font-size: 14px;
+}
+#UpdateBanner button {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: var(--Accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+#UpdateBanner .Dismiss { background: transparent; color: inherit; font-size: 18px; padding: 0 6px; }
+
+@media (max-width: 560px) {
+  .HeroText h1 { font-size: 46px; }
+  .HeroText { padding: 20px; }
+  .Hero { min-height: 260px; border-radius: 16px; }
+  .BookCover { width: 72px; height: 96px; }
+  .BookHead h2 { font-size: 24px; }
+  .Thumb { width: 88px; height: 66px; }
+  .ChapterName { font-size: 28px; }
+}

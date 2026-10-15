@@ -46,6 +46,25 @@ function OriginalLink(Url, ClassName) {
   return Anchor;
 }
 
+function BookFolder(Book) {
+  return Book.Chapters[0].Folder.split("/").slice(0, -1).join("/");
+}
+
+function BookCover(Book) {
+  return Book.Cover || BookFolder(Book) + "/Cover.jpg";
+}
+
+function ChapterThumb(Chapter) {
+  return Chapter.Thumb || Chapter.Folder + "/Thumb.jpg";
+}
+
+function FormatDate(Text) {
+  var Match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(Text || "");
+  if (!Match) return "";
+  var Value = new Date(Number(Match[1]), Number(Match[2]) - 1, Number(Match[3]));
+  return Value.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
 function CountsText(Data) {
   var Views = Data.v || 0;
   var Likes = Data.l || 0;
@@ -213,13 +232,19 @@ function RenderHome() {
   var Wrap = Make("div", "Home");
 
   var Hero = Make("div", "Hero");
+  var Backdrop = Make("div", "HeroBackdrop");
   var Cover = Make("img", "Cover");
   Cover.src = SiteInfo.Cover;
   Cover.alt = "";
-  Cover.onerror = function () { Cover.remove(); };
-  Hero.appendChild(Cover);
+  Cover.onerror = function () {
+    Cover.onerror = function () { Cover.remove(); };
+    Cover.src = BookCover(Books[0]);
+  };
+  Backdrop.appendChild(Cover);
+  Hero.appendChild(Backdrop);
 
   var Text = Make("div", "HeroText");
+  Text.appendChild(Make("div", "HeroKicker", "A Harry Potter retelling"));
   Text.appendChild(Make("h1", "", SiteInfo.Title));
   Text.appendChild(Make("p", "", SiteInfo.Tagline));
   var Actions = Make("div", "Actions");
@@ -227,6 +252,9 @@ function RenderHome() {
     var Start = Make("a", "Start", "Start reading");
     Start.href = "#" + All[0].Key;
     Actions.appendChild(Start);
+    var Latest = Make("a", "Latest", "Latest chapter");
+    Latest.href = "#" + All[All.length - 1].Key;
+    Actions.appendChild(Latest);
   }
   var Original = OriginalLink("", "Original");
   if (Original) Actions.appendChild(Original);
@@ -237,9 +265,17 @@ function RenderHome() {
   Books.forEach(function (Book, BookIndex) {
     var Section = Make("section", "Book");
     var Head = Make("div", "BookHead");
-    Head.appendChild(Make("h2", "", Book.Title));
+    var BookArt = Make("img", "BookCover");
+    BookArt.src = BookCover(Book);
+    BookArt.alt = "";
+    BookArt.onerror = function () { BookArt.remove(); };
+    Head.appendChild(BookArt);
+    var HeadText = Make("div", "BookHeadText");
+    HeadText.appendChild(Make("h2", "", Book.Title));
+    HeadText.appendChild(Make("div", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
     var BookLink = Book.OriginalUrl ? OriginalLink(Book.OriginalUrl, "BookLink") : null;
-    if (BookLink) Head.appendChild(BookLink);
+    if (BookLink) HeadText.appendChild(BookLink);
+    Head.appendChild(HeadText);
     Section.appendChild(Head);
 
     var List = Make("div", "List");
@@ -249,43 +285,273 @@ function RenderHome() {
       })[0];
       var Row = Make("a", "Row");
       Row.href = "#" + Entry.Key;
-      Row.appendChild(Make("span", "RowTitle", Chapter.Title));
-      if (Chapter.Pages) {
-        Row.appendChild(Make("span", "RowMeta", Chapter.Pages + (Chapter.Pages === 1 ? " page" : " pages")));
-      }
-      List.appendChild(Row);
+      var Thumb = Make("img", "Thumb");
+      Thumb.src = ChapterThumb(Chapter);
+      Thumb.alt = "";
+      Thumb.loading = "lazy";
+      Thumb.onerror = function () { Thumb.style.visibility = "hidden"; };
+      Row.appendChild(Thumb);
+      var Body = Make("span", "RowBody");
+      Body.appendChild(Make("span", "RowTitle", Chapter.Title));
+      var DateText = FormatDate(Chapter.Date);
+      if (DateText) Body.appendChild(Make("span", "RowDate", DateText));
       var Counts = Make("span", "RowCounts", "");
-      Row.appendChild(Counts);
+      Body.appendChild(Counts);
+      Row.appendChild(Body);
+      Row.appendChild(Make("span", "RowNum", "#" + (ChapterIndex + 1)));
+      List.appendChild(Row);
       LoadCounts(Entry, Counts);
     });
     Section.appendChild(List);
     Wrap.appendChild(Section);
   });
 
+  Wrap.appendChild(Make("footer", "SiteFoot", "Draca \u00b7 written by inachane"));
   App.appendChild(Wrap);
   window.scrollTo(0, 0);
 }
 
+function PostJson(Url, Payload) {
+  return fetch(Url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(Payload)
+  })
+    .then(function (Response) {
+      return Response.json().catch(function () { return {}; }).then(function (Data) {
+        Data.Status = Response.status;
+        return Data;
+      });
+    })
+    .catch(function () { return { error: "Offline", Status: 0 }; });
+}
+
+function TimeAgo(Time) {
+  var Seconds = Math.max(1, Math.floor((Date.now() - Time) / 1000));
+  if (Seconds < 60) return "just now";
+  var Minutes = Math.floor(Seconds / 60);
+  if (Minutes < 60) return Minutes + (Minutes === 1 ? " minute ago" : " minutes ago");
+  var Hours = Math.floor(Minutes / 60);
+  if (Hours < 24) return Hours + (Hours === 1 ? " hour ago" : " hours ago");
+  var Days = Math.floor(Hours / 24);
+  if (Days < 30) return Days + (Days === 1 ? " day ago" : " days ago");
+  return new Date(Time).toLocaleDateString();
+}
+
+var CommentErrors = {
+  BadName: "Names are 3 to 20 letters or numbers, no spaces.",
+  Taken: "That name is already taken.",
+  Slow: "Slow down a little, try again in a few seconds.",
+  BadLogin: "That name and code do not match.",
+  Empty: "Write something first.",
+  TooLong: "That comment is too long.",
+  Offline: "Could not reach the server.",
+  NoStore: "Comments are not set up yet."
+};
+
 function AddComments(Entry) {
-  var Config = SiteInfo.Giscus;
-  if (!Config || !Config.Repo || !Config.RepoId || !Config.CategoryId) return;
-  var Box = Make("div", "Comments");
-  var Tag = document.createElement("script");
-  Tag.src = "https://giscus.app/client.js";
-  Tag.async = true;
-  Tag.crossOrigin = "anonymous";
-  Tag.setAttribute("data-repo", Config.Repo);
-  Tag.setAttribute("data-repo-id", Config.RepoId);
-  Tag.setAttribute("data-category", Config.Category);
-  Tag.setAttribute("data-category-id", Config.CategoryId);
-  Tag.setAttribute("data-mapping", "specific");
-  Tag.setAttribute("data-term", Entry.Key);
-  Tag.setAttribute("data-reactions-enabled", "1");
-  Tag.setAttribute("data-input-position", "top");
-  Tag.setAttribute("data-theme", "preferred_color_scheme");
-  Tag.setAttribute("data-lang", "en");
-  Box.appendChild(Tag);
+  var Box = Make("section", "Comments");
+  var Head = Make("h3", "CommentsHead", "Comments");
+  Box.appendChild(Head);
+
+  var Account = Make("div", "CommentAccount");
+  var Form = Make("form", "CommentForm");
+  var Field = Make("textarea", "CommentField");
+  Field.placeholder = "Say something nice...";
+  Field.maxLength = 1000;
+  Field.rows = 3;
+  var Bar = Make("div", "CommentBar");
+  var Status = Make("span", "CommentStatus", "");
+  var Submit = Make("button", "CommentSubmit", "Post");
+  Submit.type = "submit";
+  Bar.appendChild(Status);
+  Bar.appendChild(Submit);
+  Form.appendChild(Field);
+  Form.appendChild(Bar);
+
+  var ListBox = Make("div", "CommentList");
+  Box.appendChild(Account);
+  Box.appendChild(Form);
+  Box.appendChild(ListBox);
   App.appendChild(Box);
+
+  var Name = StorageGet("CommentName");
+  var Token = StorageGet("CommentToken");
+  var Comments = [];
+
+  function Say(Text, Bad) {
+    Status.textContent = Text || "";
+    Status.className = "CommentStatus" + (Bad ? " Bad" : "");
+  }
+
+  function ErrorText(Data) {
+    return CommentErrors[Data.error] || "Something went wrong.";
+  }
+
+  function ShowList() {
+    ListBox.innerHTML = "";
+    Head.textContent = Comments.length ? "Comments (" + Comments.length + ")" : "Comments";
+    if (!Comments.length) {
+      ListBox.appendChild(Make("div", "CommentEmpty", "No comments yet. Be the first!"));
+      return;
+    }
+    Comments.slice().reverse().forEach(function (Item) {
+      var Card = Make("div", "CommentItem");
+      var Top = Make("div", "CommentTop");
+      Top.appendChild(Make("span", "CommentName" + (Item.member ? " Member" : ""), Item.name));
+      Top.appendChild(Make("span", "CommentTime", TimeAgo(Item.time)));
+      if (Item.member && Name && Item.name.toLowerCase() === Name.toLowerCase()) {
+        var Remove = Make("button", "CommentRemove", "Delete");
+        Remove.type = "button";
+        Remove.onclick = function () {
+          PostJson("/api/Comments", { action: "delete", key: Entry.Key, id: Item.id, name: Name, token: Token }).then(function (Data) {
+            if (Data.ok) {
+              Comments = Comments.filter(function (Other) { return Other.id !== Item.id; });
+              ShowList();
+            } else {
+              Say(ErrorText(Data), true);
+            }
+          });
+        };
+        Top.appendChild(Remove);
+      }
+      Card.appendChild(Top);
+      Card.appendChild(Make("div", "CommentText", Item.text));
+      ListBox.appendChild(Card);
+    });
+  }
+
+  function ShowAccount() {
+    Account.innerHTML = "";
+    if (Name && Token) {
+      var Line = Make("div", "CommentLine");
+      Line.appendChild(Make("span", "", "Posting as "));
+      Line.appendChild(Make("strong", "", Name));
+      var Code = Make("button", "CommentLink", "Show my code");
+      Code.type = "button";
+      Code.onclick = function () {
+        Say("Your sign-in code: " + Token + " (use it to sign in on another device)", false);
+      };
+      var Out = Make("button", "CommentLink", "Sign out");
+      Out.type = "button";
+      Out.onclick = function () {
+        Name = null;
+        Token = null;
+        StorageSet("CommentName", null);
+        StorageSet("CommentToken", null);
+        Say("");
+        ShowAccount();
+        ShowList();
+      };
+      Line.appendChild(Code);
+      Line.appendChild(Out);
+      Account.appendChild(Line);
+      return;
+    }
+    var Line2 = Make("div", "CommentLine");
+    Line2.appendChild(Make("span", "", "Posting as Anonymous. "));
+    var Pick = Make("button", "CommentLink", "Pick a username");
+    Pick.type = "button";
+    var Sign = Make("button", "CommentLink", "I already have one");
+    Sign.type = "button";
+    Line2.appendChild(Pick);
+    Line2.appendChild(Sign);
+    Account.appendChild(Line2);
+
+    function Panel(Mode) {
+      var Wrap = Make("form", "CommentJoin");
+      var NameInput = Make("input", "CommentInput");
+      NameInput.placeholder = "Username";
+      NameInput.maxLength = 20;
+      NameInput.autocomplete = "off";
+      Wrap.appendChild(NameInput);
+      var CodeInput = null;
+      if (Mode === "login") {
+        CodeInput = Make("input", "CommentInput");
+        CodeInput.placeholder = "Sign-in code";
+        CodeInput.autocomplete = "off";
+        Wrap.appendChild(CodeInput);
+      }
+      var Go = Make("button", "CommentSubmit", Mode === "login" ? "Sign in" : "Create");
+      Go.type = "submit";
+      Wrap.appendChild(Go);
+      Wrap.onsubmit = function (Event) {
+        Event.preventDefault();
+        Go.disabled = true;
+        var Payload = Mode === "login"
+          ? { action: "login", name: NameInput.value.trim(), token: CodeInput.value }
+          : { action: "register", name: NameInput.value.trim() };
+        PostJson("/api/Comments", Payload).then(function (Data) {
+          Go.disabled = false;
+          if (Data.name && Data.token) {
+            Name = Data.name;
+            Token = Data.token;
+            StorageSet("CommentName", Name);
+            StorageSet("CommentToken", Token);
+            ShowAccount();
+            Say(Mode === "login" ? "Signed in." : "Welcome, " + Name + "! Your sign-in code is " + Token + ". Save it if you want to use this name on another device.", false);
+          } else {
+            Say(ErrorText(Data), true);
+          }
+        });
+      };
+      return Wrap;
+    }
+
+    var Open = null;
+    function Toggle(Mode) {
+      if (Open) { Open.remove(); Open = null; }
+      Open = Panel(Mode);
+      Account.appendChild(Open);
+    }
+    Pick.onclick = function () { Toggle("register"); };
+    Sign.onclick = function () { Toggle("login"); };
+  }
+
+  Form.onsubmit = function (Event) {
+    Event.preventDefault();
+    var Text = Field.value.trim();
+    if (!Text) { Say(CommentErrors.Empty, true); return; }
+    Submit.disabled = true;
+    var Payload = { action: "post", key: Entry.Key, text: Text };
+    if (Name && Token) {
+      Payload.name = Name;
+      Payload.token = Token;
+    }
+    PostJson("/api/Comments", Payload).then(function (Data) {
+      Submit.disabled = false;
+      if (Data.comment) {
+        Comments.push(Data.comment);
+        Field.value = "";
+        Say("");
+        ShowList();
+      } else {
+        if (Data.error === "BadLogin") {
+          Name = null;
+          Token = null;
+          StorageSet("CommentName", null);
+          StorageSet("CommentToken", null);
+          ShowAccount();
+        }
+        Say(ErrorText(Data), true);
+      }
+    });
+  };
+
+  ShowAccount();
+  ListBox.appendChild(Make("div", "CommentEmpty", "Loading comments..."));
+  fetch("/api/Comments?key=" + Entry.Key, { cache: "no-store" })
+    .then(function (Response) { return Response.ok ? Response.json() : null; })
+    .catch(function () { return null; })
+    .then(function (Data) {
+      if (!Data) {
+        ListBox.innerHTML = "";
+        ListBox.appendChild(Make("div", "CommentEmpty", "Comments could not be loaded."));
+        return;
+      }
+      Comments = Data.comments || [];
+      ShowList();
+    });
 }
 
 function LoadPages(Reader, Chapter, PageIndex, ChapterIndex) {
@@ -335,6 +601,8 @@ function RenderChapter(Index) {
   var Title = Make("div", "ReaderTitle");
   Title.appendChild(Make("div", "BookName", Entry.Book.Title));
   Title.appendChild(Make("div", "ChapterName", Chapter.Title));
+  var PublishedText = FormatDate(Chapter.Date);
+  if (PublishedText) Title.appendChild(Make("div", "ChapterDate", "Published " + PublishedText));
   var Counts = Make("div", "ChapterCounts", "");
   Title.appendChild(Counts);
   var LikeName = "Liked" + Entry.Key;

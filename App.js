@@ -68,7 +68,16 @@ function FormatDate(Text) {
 function CountsText(Data) {
   var Views = Data.v || 0;
   var Likes = Data.l || 0;
-  return Views + (Views === 1 ? " view" : " views") + " \u00b7 " + Likes + (Likes === 1 ? " like" : " likes");
+  var Text = Views + (Views === 1 ? " view" : " views") + " \u00b7 " + Likes + (Likes === 1 ? " like" : " likes");
+  if (typeof Data.c === "number") Text += " \u00b7 " + Data.c + (Data.c === 1 ? " comment" : " comments");
+  return Text;
+}
+
+function ReadCommentCounts(Keys) {
+  return fetch("/api/Comments?keys=" + Keys.join(","), { cache: "no-store" })
+    .then(function (Response) { return Response.ok ? Response.json() : null; })
+    .then(function (Data) { return Data && Data.counts ? Data.counts : null; })
+    .catch(function () { return null; });
 }
 
 function ReadStats(Keys) {
@@ -111,10 +120,20 @@ function SessionSeen(Name) {
 var HomeStats = null;
 
 function LoadCounts(Entry, Target) {
-  if (!HomeStats) HomeStats = ReadStats(All.map(function (Item) { return Item.Key; }));
-  HomeStats.then(function (Stats) {
+  if (!HomeStats) {
+    var Keys = All.map(function (Item) { return Item.Key; });
+    HomeStats = Promise.all([ReadStats(Keys), ReadCommentCounts(Keys)]);
+  }
+  HomeStats.then(function (Pair) {
+    var Stats = Pair[0];
+    var Counts = Pair[1];
     if (!Stats) { Target.textContent = ""; return; }
-    Target.textContent = CountsText(Stats[Entry.Key] || {});
+    var Data = { v: 0, l: 0 };
+    var Found = Stats[Entry.Key] || {};
+    Data.v = Found.v || 0;
+    Data.l = Found.l || 0;
+    if (Counts) Data.c = Counts[Entry.Key] || 0;
+    Target.textContent = CountsText(Data);
   });
 }
 

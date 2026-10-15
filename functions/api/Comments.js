@@ -69,6 +69,13 @@ export async function onRequestGet(Context) {
   var Store = Context.env.STATS;
   if (!Store) return Reply({ error: "NoStore" }, 500);
   var Url = new URL(Context.request.url);
+  var Keys = Url.searchParams.get("keys");
+  if (Keys !== null) {
+    var Wanted = Keys.split(",").filter(function (Item) { return KeyPattern.test(Item); }).slice(0, 60);
+    var Counts = {};
+    for (var Each of Wanted) Counts[Each] = (await ReadList(Store, Each)).length;
+    return Reply({ counts: Counts });
+  }
   var Key = Url.searchParams.get("key") || "";
   if (!KeyPattern.test(Key)) return Reply({ error: "BadKey" }, 400);
   var List = await ReadList(Store, Key);

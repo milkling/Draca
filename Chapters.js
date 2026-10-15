@@ -16,6 +16,7 @@ var Books = [
       { Title: "Chapter 2: Hogwarts Express", Folder: "Chapters/Book1/Chapter2", Date: "2026-10-14" },
       { Title: "Chapter 3: The Sorting Hat", Folder: "Chapters/Book1/Chapter3", Date: "2026-10-14" },
       { Title: "Chapter 4: The Flying Lessons", Folder: "Chapters/Book1/Chapter4", Date: "2026-10-14" },
+      { Title: "Chapter 5: The Youngest Seeker", Folder: "Chapters/Book1/Chapter5", Date: "2026-10-15" },
     ]
   },
   {

@@ -124,6 +124,46 @@ function SessionSeen(Name) {
   return false;
 }
 
+function ReadKnown() {
+  var Raw = StorageGet("KnownChapters");
+  if (!Raw) return null;
+  try {
+    var List = JSON.parse(Raw);
+    return Array.isArray(List) ? List : null;
+  } catch (Failure) {
+    return null;
+  }
+}
+
+function WriteKnown(List) {
+  StorageSet("KnownChapters", JSON.stringify(List));
+}
+
+function AllKeys() {
+  return All.map(function (Item) { return Item.Key; });
+}
+
+function FindNewEntries() {
+  var Known = ReadKnown();
+  if (!Known) {
+    WriteKnown(AllKeys());
+    return [];
+  }
+  return All.filter(function (Item) { return Known.indexOf(Item.Key) < 0; });
+}
+
+function MarkKnown(Key) {
+  var Known = ReadKnown();
+  if (!Known) {
+    WriteKnown(AllKeys());
+    return;
+  }
+  if (Known.indexOf(Key) < 0) {
+    Known.push(Key);
+    WriteKnown(Known);
+  }
+}
+
 var HomeStats = null;
 
 function LoadCounts(Entry, Target) {
@@ -252,7 +292,9 @@ function RenderHome() {
   StopMusic();
   ShowMusicButton(false);
   HomeStats = null;
-  document.title = SiteInfo.Title;
+  var Fresh = FindNewEntries();
+  var FreshKeys = Fresh.map(function (Item) { return Item.Key; });
+  document.title = (Fresh.length ? "(" + Fresh.length + ") " : "") + SiteInfo.Title;
   Nav.innerHTML = "";
   App.innerHTML = "";
   var Wrap = Make("div", "Home");
@@ -287,6 +329,18 @@ function RenderHome() {
   Text.appendChild(Actions);
   Hero.appendChild(Text);
   Wrap.appendChild(Hero);
+
+  if (Fresh.length) {
+    var Banner = Make("a", "NewBanner");
+    Banner.href = "#" + Fresh[0].Key;
+    var Newest = Fresh[Fresh.length - 1];
+    var Headline = Fresh.length === 1
+      ? "New chapter: " + Newest.Chapter.Title
+      : Fresh.length + " new chapters since your last visit";
+    Banner.appendChild(Make("span", "NewBannerTitle", Headline));
+    Banner.appendChild(Make("span", "NewBannerGo", Fresh.length === 1 ? "Read now" : "Start with " + Fresh[0].Chapter.Title));
+    Wrap.appendChild(Banner);
+  }
 
   Books.forEach(function (Book, BookIndex) {
     var Section = Make("section", "Book");
@@ -324,7 +378,9 @@ function RenderHome() {
       Thumb.onerror = function () { Thumb.style.visibility = "hidden"; };
       Row.appendChild(Thumb);
       var Body = Make("span", "RowBody");
-      Body.appendChild(Make("span", "RowTitle", Chapter.Title));
+      var TitleNode = Make("span", "RowTitle", Chapter.Title);
+      if (FreshKeys.indexOf(Entry.Key) >= 0) TitleNode.appendChild(Make("span", "NewTag", "New"));
+      Body.appendChild(TitleNode);
       var DateText = FormatDate(Chapter.Date);
       if (DateText) Body.appendChild(Make("span", "RowDate", DateText));
       var Counts = Make("span", "RowCounts", "");
@@ -619,6 +675,7 @@ function RenderChapter(Index) {
   var Entry = All[Index];
   var Chapter = Entry.Chapter;
   document.title = Chapter.Title + " | " + SiteInfo.Title;
+  MarkKnown(Entry.Key);
   Nav.innerHTML = "";
   var HasPrev = Index > 0;
   var HasNext = Index < All.length - 1;

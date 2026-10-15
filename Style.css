@@ -145,6 +145,39 @@ button { font: inherit; }
 }
 .Latest:hover, .Original:hover { background: rgba(255, 255, 255, 0.2); }
 
+.NewBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: -16px 0 32px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--Gold);
+  background: var(--Card);
+  box-shadow: var(--Shadow);
+  transition: transform 0.15s;
+}
+.NewBanner:hover { transform: translateY(-1px); }
+.NewBannerTitle { font-weight: 700; }
+.NewBannerGo { color: var(--Accent); font-size: 14px; font-weight: 600; }
+.NewTag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--Accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+}
+@media (prefers-color-scheme: dark) {
+  .NewTag { color: #1b1208; }
+}
 .Book { margin-bottom: 44px; }
 .BookHead {
   display: flex;

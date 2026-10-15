@@ -291,7 +291,13 @@ function RenderHome() {
     Head.appendChild(BookArt);
     var HeadText = Make("div", "BookHeadText");
     HeadText.appendChild(Make("h2", "", Book.Title));
-    HeadText.appendChild(Make("div", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
+    var Meta = Make("div", "BookMeta");
+    if (Book.Status) {
+      var Done = Book.Status.toLowerCase() === "complete";
+      Meta.appendChild(Make("span", "BookStatus" + (Done ? " Complete" : " Ongoing"), Book.Status));
+    }
+    Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
+    HeadText.appendChild(Meta);
     var BookLink = Book.OriginalUrl ? OriginalLink(Book.OriginalUrl, "BookLink") : null;
     if (BookLink) HeadText.appendChild(BookLink);
     Head.appendChild(HeadText);

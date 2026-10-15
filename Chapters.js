@@ -9,6 +9,7 @@ var SiteInfo = {
 var Books = [
   {
     Title: "Book 1: The Philosopher's Stone",
+    Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417160307-draca-malfoy-and-the-philosopher%27s-stone",
     Chapters: [
       { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1", Date: "2026-10-14" },
@@ -19,6 +20,7 @@ var Books = [
   },
   {
     Title: "Book 4: The Goblet of Fire",
+    Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",
     Chapters: [
       {

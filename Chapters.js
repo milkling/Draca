@@ -9,7 +9,7 @@ var SiteInfo = {
 var Books = [
   {
     Title: "Book 1: The Philosopher's Stone",
-    Status: "Ongoing",
+    Status: "Complete",
     OriginalUrl: "https://www.wattpad.com/story/417160307-draca-malfoy-and-the-philosopher%27s-stone",
     Chapters: [
       { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book1/Chapter1", Date: "2026-10-14" },
@@ -22,6 +22,11 @@ var Books = [
       { Title: "Chapter 8: End of Year Dining Hall", Folder: "Chapters/Book1/Chapter8", Date: "2026-10-15" },
       { Title: "Chapter 9: Home", Folder: "Chapters/Book1/Chapter9", Date: "2026-10-15" },
     ]
+  },
+  {
+    Title: "Book 2: The Chamber of Secrets",
+    Status: "Coming soon",
+    Chapters: []
   },
   {
     Title: "Book 4: The Goblet of Fire",

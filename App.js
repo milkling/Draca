@@ -47,11 +47,14 @@ function OriginalLink(Url, ClassName) {
 }
 
 function BookFolder(Book) {
+  if (!Book.Chapters.length) return "";
   return Book.Chapters[0].Folder.split("/").slice(0, -1).join("/");
 }
 
 function BookCover(Book) {
-  return Book.Cover || BookFolder(Book) + "/Cover.jpg";
+  if (Book.Cover) return Book.Cover;
+  var Folder = BookFolder(Book);
+  return Folder ? Folder + "/Cover.jpg" : "";
 }
 
 function ChapterThumb(Chapter) {
@@ -448,24 +451,36 @@ function RenderHome() {
   Books.forEach(function (Book, BookIndex) {
     var Section = Make("section", "Book");
     var Head = Make("div", "BookHead");
-    var BookArt = Make("img", "BookCover");
-    BookArt.src = BookCover(Book);
-    BookArt.alt = "";
-    BookArt.onerror = function () { BookArt.remove(); };
-    Head.appendChild(BookArt);
+    var CoverSrc = BookCover(Book);
+    if (CoverSrc) {
+      var BookArt = Make("img", "BookCover");
+      BookArt.src = CoverSrc;
+      BookArt.alt = "";
+      BookArt.onerror = function () { BookArt.remove(); };
+      Head.appendChild(BookArt);
+    }
     var HeadText = Make("div", "BookHeadText");
     HeadText.appendChild(Make("h2", "", Book.Title));
     var Meta = Make("div", "BookMeta");
     if (Book.Status) {
-      var Done = Book.Status.toLowerCase() === "complete";
-      Meta.appendChild(Make("span", "BookStatus" + (Done ? " Complete" : " Ongoing"), Book.Status));
+      var Level = Book.Status.toLowerCase();
+      var StatusClass = Level === "complete" ? " Complete" : Level === "coming soon" ? " Soon" : " Ongoing";
+      Meta.appendChild(Make("span", "BookStatus" + StatusClass, Book.Status));
     }
-    Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
+    if (Book.Chapters.length) {
+      Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
+    }
     HeadText.appendChild(Meta);
     var BookLink = Book.OriginalUrl ? OriginalLink(Book.OriginalUrl, "BookLink") : null;
     if (BookLink) HeadText.appendChild(BookLink);
     Head.appendChild(HeadText);
     Section.appendChild(Head);
+
+    if (!Book.Chapters.length) {
+      Section.appendChild(Make("div", "ComingSoon", "Chapters are on the way. Check back soon!"));
+      Wrap.appendChild(Section);
+      return;
+    }
 
     var List = Make("div", "List");
     Book.Chapters.forEach(function (Chapter, ChapterIndex) {

@@ -164,6 +164,88 @@ function MarkKnown(Key) {
   }
 }
 
+var ScrollWatcher = null;
+var ResumeIntent = null;
+var ReadingArmedAt = 0;
+
+function ReadBookmarks() {
+  var Raw = StorageGet("Bookmarks");
+  if (!Raw) return {};
+  try {
+    var Data = JSON.parse(Raw);
+    return Data && typeof Data === "object" ? Data : {};
+  } catch (Failure) {
+    return {};
+  }
+}
+
+function SaveBookmark(Key, Data) {
+  var Marks = ReadBookmarks();
+  Marks[Key] = Data;
+  StorageSet("Bookmarks", JSON.stringify(Marks));
+  StorageSet("LastRead", Key);
+}
+
+function ClearBookmark(Key) {
+  var Marks = ReadBookmarks();
+  delete Marks[Key];
+  StorageSet("Bookmarks", JSON.stringify(Marks));
+}
+
+function StopWatchingScroll() {
+  if (ScrollWatcher) {
+    window.removeEventListener("scroll", ScrollWatcher);
+    ScrollWatcher = null;
+  }
+}
+
+function WatchReading(Entry, Reader) {
+  StopWatchingScroll();
+  var Timer = null;
+  ReadingArmedAt = Date.now() + 1200;
+  ScrollWatcher = function () {
+    if (Date.now() < ReadingArmedAt || Timer) return;
+    Timer = setTimeout(function () {
+      Timer = null;
+      var Current = FindByHash();
+      if (Current < 0 || All[Current].Key !== Entry.Key) return;
+      var Images = Reader.querySelectorAll("img");
+      if (!Images.length || window.scrollY < 120) return;
+      var Line = 90;
+      var ReaderBox = Reader.getBoundingClientRect();
+      if (ReaderBox.bottom < window.innerHeight + 150) {
+        SaveBookmark(Entry.Key, { Page: Images.length - 1, Offset: 0, Done: true });
+        return;
+      }
+      for (var I = 0; I < Images.length; I++) {
+        var Box = Images[I].getBoundingClientRect();
+        if (Box.top <= Line && Box.bottom > Line) {
+          SaveBookmark(Entry.Key, { Page: I, Offset: Math.round(((Line - Box.top) / Box.height) * 1000) / 1000, Done: false });
+          return;
+        }
+      }
+    }, 400);
+  };
+  window.addEventListener("scroll", ScrollWatcher, { passive: true });
+}
+
+function ResumeTo(Reader, Saved) {
+  var Tries = 0;
+  function Attempt() {
+    var Images = Reader.querySelectorAll("img");
+    if (Images.length > Saved.Page) {
+      var Image = Images[Saved.Page];
+      var Top = Image.getBoundingClientRect().top + window.scrollY;
+      ReadingArmedAt = Date.now() + 1200;
+      window.scrollTo(0, Math.max(0, Top + Image.height * (Saved.Offset || 0) - 90));
+      return;
+    }
+    Tries++;
+    if (Tries < 80) setTimeout(Attempt, 250);
+  }
+  Attempt();
+}
+
 var HomeStats = null;
 
 function LoadCounts(Entry, Target) {
@@ -289,6 +371,7 @@ function WatchMusic(Img, Chapter, PageIndex, ChapterIndex) {
 }
 
 function RenderHome() {
+  StopWatchingScroll();
   StopMusic();
   ShowMusicButton(false);
   HomeStats = null;
@@ -316,9 +399,29 @@ function RenderHome() {
   Text.appendChild(Make("h1", "", SiteInfo.Title));
   Text.appendChild(Make("p", "", SiteInfo.Tagline));
   var Actions = Make("div", "Actions");
+  var Marks = ReadBookmarks();
+  var LastKey = StorageGet("LastRead");
+  var Last = All.filter(function (Item) { return Item.Key === LastKey; })[0];
   if (All.length > 0) {
-    var Start = Make("a", "Start", "Start reading");
-    Start.href = "#" + All[0].Key;
+    var Start = null;
+    if (Last) {
+      var Target = Last;
+      var Label = "Continue: " + Last.Chapter.Title;
+      var LastMark = Marks[Last.Key] || {};
+      var Following = All[All.indexOf(Last) + 1];
+      if (LastMark.Done && Following) {
+        Target = Following;
+        Label = "Next: " + Following.Chapter.Title;
+      } else if (LastMark.Done) {
+        Label = "Reread: " + Last.Chapter.Title;
+      }
+      Start = Make("a", "Start", Label);
+      Start.href = "#" + Target.Key;
+      Start.onclick = function () { ResumeIntent = Target.Key; };
+    } else {
+      Start = Make("a", "Start", "Start reading");
+      Start.href = "#" + All[0].Key;
+    }
     Actions.appendChild(Start);
     var Latest = Make("a", "Latest", "Latest chapter");
     Latest.href = "#" + All[All.length - 1].Key;
@@ -380,6 +483,9 @@ function RenderHome() {
       var Body = Make("span", "RowBody");
       var TitleNode = Make("span", "RowTitle", Chapter.Title);
       if (FreshKeys.indexOf(Entry.Key) >= 0) TitleNode.appendChild(Make("span", "NewTag", "New"));
+      var RowMark = Marks[Entry.Key];
+      if (RowMark && RowMark.Done) TitleNode.appendChild(Make("span", "ReadTag", "Read"));
+      else if (RowMark) TitleNode.appendChild(Make("span", "ReadTag Active", "Page " + (RowMark.Page + 1)));
       Body.appendChild(TitleNode);
       var DateText = FormatDate(Chapter.Date);
       if (DateText) Body.appendChild(Make("span", "RowDate", DateText));
@@ -685,6 +791,7 @@ function RenderChapter(Index) {
   Nav.appendChild(Link("Chapters", "#", ""));
   Nav.appendChild(Link("Next", NextHref, HasNext ? "" : "Off"));
 
+  StopWatchingScroll();
   StopMusic();
   ShowMusicButton(!!Chapter.Music);
   App.innerHTML = "";
@@ -726,7 +833,32 @@ function RenderChapter(Index) {
 
   var Reader = Make("div", "Reader");
   App.appendChild(Reader);
+  var Saved = ReadBookmarks()[Entry.Key];
+  var Resuming = ResumeIntent === Entry.Key;
+  ResumeIntent = null;
+  if (Saved && !Saved.Done && Resuming) {
+    ResumeTo(Reader, Saved);
+  } else if (Saved && !Saved.Done && (Saved.Page > 0 || Saved.Offset > 0.1)) {
+    var Bar = Make("div", "ResumeBar");
+    Bar.appendChild(Make("span", "", "You stopped at page " + (Saved.Page + 1)));
+    var Go = Make("button", "ResumeGo", "Continue");
+    Go.type = "button";
+    Go.onclick = function () {
+      Bar.remove();
+      ResumeTo(Reader, Saved);
+    };
+    var Again = Make("button", "ResumeAgain", "Start over");
+    Again.type = "button";
+    Again.onclick = function () {
+      Bar.remove();
+      ClearBookmark(Entry.Key);
+    };
+    Bar.appendChild(Go);
+    Bar.appendChild(Again);
+    App.insertBefore(Bar, Reader);
+  }
   LoadPages(Reader, Chapter, 0, Index);
+  WatchReading(Entry, Reader);
 
   var Foot = Make("div", "Foot");
   Foot.appendChild(Link("Previous chapter", PrevHref, HasPrev ? "" : "Off"));

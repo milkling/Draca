@@ -65,6 +65,13 @@ function FormatDate(Text) {
   return Value.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+function DisclaimerBox() {
+  var Box = Make("aside", "Disclaimer");
+  Box.appendChild(Make("strong", "", "Disclaimer"));
+  Box.appendChild(Make("p", "", "All artwork on this site was generated with AI. The story itself was written entirely by me. This is a non-commercial fan work made for fun: I earn no money from it, with no ads, sales or donations. Harry Potter and all related characters and settings belong to J.K. Rowling and her publishers. No ownership is claimed and no infringement is intended."));
+  return Box;
+}
+
 function CountsText(Data) {
   var Views = Data.v || 0;
   var Likes = Data.l || 0;
@@ -331,6 +338,7 @@ function RenderHome() {
     Wrap.appendChild(Section);
   });
 
+  Wrap.appendChild(DisclaimerBox());
   Wrap.appendChild(Make("footer", "SiteFoot", "Draca \u00b7 written by inachane"));
   App.appendChild(Wrap);
   window.scrollTo(0, 0);
@@ -669,6 +677,7 @@ function RenderChapter(Index) {
   if (Original) Foot.appendChild(Original);
   Foot.appendChild(Link("Next chapter", NextHref, HasNext ? "" : "Off"));
   App.appendChild(Foot);
+  App.appendChild(DisclaimerBox());
   AddComments(Entry);
   window.scrollTo(0, 0);
 }

@@ -222,6 +222,20 @@ button { font: inherit; }
   font-variant-numeric: tabular-nums;
   flex: none;
 }
+.Disclaimer {
+  max-width: 720px;
+  margin: 0 auto 28px;
+  padding: 14px 16px;
+  border: 1px solid var(--Line);
+  border-left: 3px solid var(--Gold);
+  border-radius: 10px;
+  background: var(--Card);
+  color: var(--Soft);
+  font-size: 13px;
+}
+.Disclaimer strong { color: var(--Fg); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+.Disclaimer p { margin: 4px 0 0; }
+.Home .Disclaimer { margin-top: 8px; }
 .SiteFoot {
   text-align: center;
   color: var(--Soft);

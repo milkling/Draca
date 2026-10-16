@@ -27,7 +27,8 @@ var Books = [
     Title: "Book 2: The Chamber of Secrets",
     Status: "Ongoing",
     Chapters: [
-      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book2/Chapter1", Date: "2026-10-16" }
+      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book2/Chapter1", Date: "2026-10-16" },
+      { Title: "Chapter 2: The Diary", Folder: "Chapters/Book2/Chapter2", Date: "2026-10-16" }
     ]
   },
   {

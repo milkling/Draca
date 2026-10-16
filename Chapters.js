@@ -25,8 +25,10 @@ var Books = [
   },
   {
     Title: "Book 2: The Chamber of Secrets",
-    Status: "Coming soon",
-    Chapters: []
+    Status: "Ongoing",
+    Chapters: [
+      { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book2/Chapter1", Date: "2026-10-16" }
+    ]
   },
   {
     Title: "Book 4: The Goblet of Fire",

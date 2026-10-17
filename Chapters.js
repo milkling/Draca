@@ -57,15 +57,6 @@ var Books = [
     Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",
     Chapters: [
-      {
-        Title: "Chapter 4: Dancing, a Practical Arrangement",
-        Folder: "Chapters/Book4/Chapter4",
-        Date: "2026-10-14",
-        Music: [
-          { Page: 5, Src: "Chapters/Book4/Chapter4/Waltz.mp3", Volume: 0.5 },
-          { Page: 8, Src: "" }
-        ]
-      }
     ]
   }
 ];

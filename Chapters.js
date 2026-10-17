@@ -25,7 +25,8 @@ var Books = [
   },
   {
     Title: "Book 2: The Chamber of Secrets",
-    Status: "Ongoing",
+    Status: "Complete",
+    OriginalUrl: "https://www.wattpad.com/story/417161781-draca-malfoy-and-the-chamber-of-secrets",
     Chapters: [
       { Title: "Chapter 1: Diagon Alley", Folder: "Chapters/Book2/Chapter1", Date: "2026-10-16" },
       { Title: "Chapter 2: The Diary", Folder: "Chapters/Book2/Chapter2", Date: "2026-10-16" },
@@ -36,7 +37,8 @@ var Books = [
       { Title: "Chapter 7: The Diary?", Folder: "Chapters/Book2/Chapter7", Date: "2026-10-16" },
       { Title: "Chapter 8: Aragog", Folder: "Chapters/Book2/Chapter8", Date: "2026-10-16" },
       { Title: "Chapter 9: Ladies First", Folder: "Chapters/Book2/Chapter9", Date: "2026-10-17" },
-      { Title: "Chapter 10: The Boy in The Diary", Folder: "Chapters/Book2/Chapter10", Date: "2026-10-17" }
+      { Title: "Chapter 10: The Boy in The Diary", Folder: "Chapters/Book2/Chapter10", Date: "2026-10-17" },
+      { Title: "Chapter 11: One Sock, One Free Elf", Folder: "Chapters/Book2/Chapter11", Date: "2026-10-17" }
     ]
   },
   {

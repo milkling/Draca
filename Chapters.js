@@ -45,7 +45,8 @@ var Books = [
     Title: "Book 3: The Prisoner of Azkaban",
     Status: "Ongoing",
     Chapters: [
-      { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" }
+      { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" },
+      { Title: "Chapter 2: The Dementors", Folder: "Chapters/Book3/Chapter2", Date: "2026-10-17" }
     ]
   },
   {

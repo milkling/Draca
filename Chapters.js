@@ -35,7 +35,8 @@ var Books = [
       { Title: "Chapter 6: The Disguise", Folder: "Chapters/Book2/Chapter6", Date: "2026-10-16" },
       { Title: "Chapter 7: The Diary?", Folder: "Chapters/Book2/Chapter7", Date: "2026-10-16" },
       { Title: "Chapter 8: Aragog", Folder: "Chapters/Book2/Chapter8", Date: "2026-10-16" },
-      { Title: "Chapter 9: Ladies First", Folder: "Chapters/Book2/Chapter9", Date: "2026-10-17" }
+      { Title: "Chapter 9: Ladies First", Folder: "Chapters/Book2/Chapter9", Date: "2026-10-17" },
+      { Title: "Chapter 10: The Boy in The Diary", Folder: "Chapters/Book2/Chapter10", Date: "2026-10-17" }
     ]
   },
   {

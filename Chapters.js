@@ -42,6 +42,13 @@ var Books = [
     ]
   },
   {
+    Title: "Book 3: The Prisoner of Azkaban",
+    Status: "Ongoing",
+    Chapters: [
+      { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" }
+    ]
+  },
+  {
     Title: "Book 4: The Goblet of Fire",
     Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",

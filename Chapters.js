@@ -46,7 +46,8 @@ var Books = [
     Status: "Ongoing",
     Chapters: [
       { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" },
-      { Title: "Chapter 2: The Dementors", Folder: "Chapters/Book3/Chapter2", Date: "2026-10-17" }
+      { Title: "Chapter 2: The Dementors", Folder: "Chapters/Book3/Chapter2", Date: "2026-10-17" },
+      { Title: "Chapter 3: The Same Shape", Folder: "Chapters/Book3/Chapter3", Date: "2026-10-17" }
     ]
   },
   {

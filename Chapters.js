@@ -82,7 +82,16 @@ var Books = [
           { Page: 1, Src: "Chapters/Book4/Chapter9/Music.mp3", Volume: 0.5 }
         ]
       },
-      { Title: "Chapter 10: Green Dress Robes", Folder: "Chapters/Book4/Chapter10", Date: "2026-10-19" }
+      { Title: "Chapter 10: Green Dress Robes", Folder: "Chapters/Book4/Chapter10", Date: "2026-10-19" },
+      {
+        Title: "Chapter 11: A Dance",
+        Folder: "Chapters/Book4/Chapter11",
+        Date: "2026-10-19",
+        Music: [
+          { Page: 1, Src: "Chapters/Book4/Chapter11/Waltz.mp3", Volume: 0.5 },
+          { Page: 6, Src: "Chapters/Book4/Chapter11/QuietGaze.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

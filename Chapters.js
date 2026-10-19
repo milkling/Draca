@@ -43,14 +43,15 @@ var Books = [
   },
   {
     Title: "Book 3: The Prisoner of Azkaban",
-    Status: "Ongoing",
+    Status: "Complete",
     Chapters: [
       { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" },
       { Title: "Chapter 2: The Dementors", Folder: "Chapters/Book3/Chapter2", Date: "2026-10-17" },
       { Title: "Chapter 3: The Same Shape", Folder: "Chapters/Book3/Chapter3", Date: "2026-10-17" },
       { Title: "Chapter 4: What I Said", Folder: "Chapters/Book3/Chapter4", Date: "2026-10-17" },
       { Title: "Chapter 5: Two Places at Once", Folder: "Chapters/Book3/Chapter5", Date: "2026-10-17" },
-      { Title: "Chapter 6: The Mirror", Folder: "Chapters/Book3/Chapter6", Date: "2026-10-17" }
+      { Title: "Chapter 6: The Mirror", Folder: "Chapters/Book3/Chapter6", Date: "2026-10-17" },
+      { Title: "Chapter 7: A Seat by The Window", Folder: "Chapters/Book3/Chapter7", Date: "2026-10-19" }
     ]
   },
   {

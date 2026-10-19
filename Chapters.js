@@ -65,7 +65,15 @@ var Books = [
       { Title: "Chapter 4: Constant Vigilance", Folder: "Chapters/Book4/Chapter4", Date: "2026-10-19" },
       { Title: "Chapter 5: The Goblet", Folder: "Chapters/Book4/Chapter5", Date: "2026-10-19" },
       { Title: "Chapter 6: The Badge", Folder: "Chapters/Book4/Chapter6", Date: "2026-10-19" },
-      { Title: "Chapter 7: Don't Call It a Date", Folder: "Chapters/Book4/Chapter7", Date: "2026-10-19" }
+      { Title: "Chapter 7: Don't Call It a Date", Folder: "Chapters/Book4/Chapter7", Date: "2026-10-19" },
+      {
+        Title: "Chapter 8: A Practical Arrangement",
+        Folder: "Chapters/Book4/Chapter8",
+        Date: "2026-10-19",
+        Music: [
+          { Page: 1, Src: "Chapters/Book4/Chapter8/Music.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

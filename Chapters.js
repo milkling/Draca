@@ -73,6 +73,14 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book4/Chapter8/Music.mp3", Volume: 0.5 }
         ]
+      },
+      {
+        Title: "Chapter 9: Off the Record",
+        Folder: "Chapters/Book4/Chapter9",
+        Date: "2026-10-19",
+        Music: [
+          { Page: 1, Src: "Chapters/Book4/Chapter9/Music.mp3", Volume: 0.5 }
+        ]
       }
     ]
   }

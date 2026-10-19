@@ -60,7 +60,8 @@ var Books = [
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",
     Chapters: [
       { Title: "Chapter 1: The Top Box", Folder: "Chapters/Book4/Chapter1", Date: "2026-10-19" },
-      { Title: "Chapter 2: The Mark", Folder: "Chapters/Book4/Chapter2", Date: "2026-10-19" }
+      { Title: "Chapter 2: The Mark", Folder: "Chapters/Book4/Chapter2", Date: "2026-10-19" },
+      { Title: "Chapter 3: That's Something", Folder: "Chapters/Book4/Chapter3", Date: "2026-10-19" }
     ]
   }
 ];

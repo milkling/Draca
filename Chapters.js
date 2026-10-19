@@ -61,7 +61,10 @@ var Books = [
     Chapters: [
       { Title: "Chapter 1: The Top Box", Folder: "Chapters/Book4/Chapter1", Date: "2026-10-19" },
       { Title: "Chapter 2: The Mark", Folder: "Chapters/Book4/Chapter2", Date: "2026-10-19" },
-      { Title: "Chapter 3: That's Something", Folder: "Chapters/Book4/Chapter3", Date: "2026-10-19" }
+      { Title: "Chapter 3: That's Something", Folder: "Chapters/Book4/Chapter3", Date: "2026-10-19" },
+      { Title: "Chapter 4: Constant Vigilance", Folder: "Chapters/Book4/Chapter4", Date: "2026-10-19" },
+      { Title: "Chapter 5: The Goblet", Folder: "Chapters/Book4/Chapter5", Date: "2026-10-19" },
+      { Title: "Chapter 6: The Badge", Folder: "Chapters/Book4/Chapter6", Date: "2026-10-19" }
     ]
   }
 ];

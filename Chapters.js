@@ -81,7 +81,8 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book4/Chapter9/Music.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      { Title: "Chapter 10: Green Dress Robes", Folder: "Chapters/Book4/Chapter10", Date: "2026-10-19" }
     ]
   }
 ];

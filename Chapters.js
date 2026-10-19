@@ -91,7 +91,8 @@ var Books = [
           { Page: 1, Src: "Chapters/Book4/Chapter11/Waltz.mp3", Volume: 0.5 },
           { Page: 6, Src: "Chapters/Book4/Chapter11/QuietGaze.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      { Title: "Chapter 12: Butter Beer and Other Excuses", Folder: "Chapters/Book4/Chapter12", Date: "2026-10-19" }
     ]
   }
 ];

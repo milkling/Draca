@@ -95,7 +95,8 @@ var Books = [
       { Title: "Chapter 12: Butter Beer and Other Excuses", Folder: "Chapters/Book4/Chapter12", Date: "2026-10-19" },
       { Title: "Chapter 13: Five More Minutes", Folder: "Chapters/Book4/Chapter13", Date: "2026-10-19" },
       { Title: "Chapter 14: Friends Hug", Folder: "Chapters/Book4/Chapter14", Date: "2026-10-20" },
-      { Title: "Chapter 15: Practically, In Writing", Folder: "Chapters/Book4/Chapter15", Date: "2026-10-20" }
+      { Title: "Chapter 15: Practically, In Writing", Folder: "Chapters/Book4/Chapter15", Date: "2026-10-20" },
+      { Title: "Chapter 16: Pine-Fresh", Folder: "Chapters/Book4/Chapter16", Date: "2026-10-20" }
     ]
   }
 ];

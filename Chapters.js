@@ -104,7 +104,10 @@ var Books = [
       { Title: "Chapter 21: Take Only Your Own", Folder: "Chapters/Book4/Chapter21", Date: "2026-10-20" },
       { Title: "Chapter 22: Page Seven", Folder: "Chapters/Book4/Chapter22", Date: "2026-10-20" },
       { Title: "Chapter 23: Practice Makes Passable", Folder: "Chapters/Book4/Chapter23", Date: "2026-10-20" },
-      { Title: "Chapter 24: The Tower Roof", Folder: "Chapters/Book4/Chapter24", Date: "2026-10-20" }
+      { Title: "Chapter 24: The Tower Roof", Folder: "Chapters/Book4/Chapter24", Date: "2026-10-20" },
+      { Title: "Chapter 25: A Logistical Possibility", Folder: "Chapters/Book4/Chapter25", Date: "2026-10-20" },
+      { Title: "Chapter 26: After the Maze", Folder: "Chapters/Book4/Chapter26", Date: "2026-10-20" },
+      { Title: "Chapter 27: The Graveyard", Folder: "Chapters/Book4/Chapter27", Date: "2026-10-20" }
     ]
   }
 ];

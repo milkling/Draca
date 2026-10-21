@@ -60,7 +60,7 @@ var Books = [
   {
     Title: "Book 4: The Goblet of Fire",
     Cover: "Chapters/Book4/CoverArt.jpg",
-    Status: "Ongoing",
+    Status: "Complete",
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",
     Chapters: [
       { Title: "Chapter 1: The Top Box", Folder: "Chapters/Book4/Chapter1", Date: "2026-10-19" },
@@ -115,7 +115,8 @@ var Books = [
       { Title: "Chapter 28: Don't Let Go", Folder: "Chapters/Book4/Chapter28", Date: "2026-10-21" },
       { Title: "Chapter 29: What Is Owed", Folder: "Chapters/Book4/Chapter29", Date: "2026-10-21" },
       { Title: "Chapter 30: Chosen", Folder: "Chapters/Book4/Chapter30", Date: "2026-10-21" },
-      { Title: "Chapter 31: Four Chairs", Folder: "Chapters/Book4/Chapter31", Date: "2026-10-21" }
+      { Title: "Chapter 31: Four Chairs", Folder: "Chapters/Book4/Chapter31", Date: "2026-10-21" },
+      { Title: "Chapter 32: The Last Night", Folder: "Chapters/Book4/Chapter32", Date: "2026-10-21" }
     ]
   }
 ];

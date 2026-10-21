@@ -269,6 +269,28 @@ function LoadCounts(Entry, Target) {
   });
 }
 
+function LoadBookTotals(BookIndex, Target) {
+  var Keys = All.map(function (Item) { return Item.Key; });
+  if (!HomeStats) HomeStats = Promise.all([ReadStats(Keys), ReadCommentCounts(Keys)]);
+  HomeStats.then(function (Pair) {
+    var Stats = Pair[0];
+    var Counts = Pair[1];
+    if (!Stats) return;
+    var Data = { v: 0, l: 0 };
+    if (Counts) Data.c = 0;
+    All.forEach(function (Item) {
+      if (Item.BookIndex !== BookIndex) return;
+      var Found = Stats[Item.Key] || {};
+      Data.v += Found.v || 0;
+      Data.l += Found.l || 0;
+      if (Counts) Data.c += Counts[Item.Key] || 0;
+    });
+    var Parts = [Data.v + (Data.v === 1 ? " view" : " views"), Data.l + (Data.l === 1 ? " like" : " likes")];
+    if (Counts) Parts.push(Data.c + (Data.c === 1 ? " comment" : " comments"));
+    Target.textContent = Parts.join(" \u00b7 ");
+  });
+}
+
 var MusicAudio = null;
 var MusicSrc = "";
 var MusicButton = null;
@@ -570,6 +592,9 @@ function RenderHome() {
       Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
     }
     Card.appendChild(Meta);
+    var Totals = Make("span", "BookTotals", "");
+    Card.appendChild(Totals);
+    LoadBookTotals(BookIndex, Totals);
     Card.onclick = function () { OpenBook(Book, BookIndex, FreshKeys, Marks); };
     Shelf.appendChild(Card);
   });

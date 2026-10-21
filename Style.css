@@ -624,3 +624,6 @@ body.ModalOpen { overflow: hidden; }
   .Shelf { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .BookCardTitle { font-size: 19px; }
 }
+
+.BookTotals { color: var(--Soft); font-size: 12px; line-height: 1.4; }
+.BookTotals:empty { display: none; }

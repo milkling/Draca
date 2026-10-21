@@ -19,7 +19,7 @@ export async function onRequestGet(Context) {
   var Url = new URL(Context.request.url);
   var Keys = (Url.searchParams.get("keys") || "").split(",").filter(function (Key) {
     return KeyPattern.test(Key);
-  }).slice(0, 60);
+  }).slice(0, 200);
   var Result = {};
   for (var Key of Keys) Result[Key] = await ReadStats(Store, Key);
   return Reply(Result);

@@ -71,7 +71,7 @@ export async function onRequestGet(Context) {
   var Url = new URL(Context.request.url);
   var Keys = Url.searchParams.get("keys");
   if (Keys !== null) {
-    var Wanted = Keys.split(",").filter(function (Item) { return KeyPattern.test(Item); }).slice(0, 60);
+    var Wanted = Keys.split(",").filter(function (Item) { return KeyPattern.test(Item); }).slice(0, 200);
     var Counts = {};
     for (var Each of Wanted) Counts[Each] = (await ReadList(Store, Each)).length;
     return Reply({ counts: Counts });

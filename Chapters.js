@@ -9,6 +9,7 @@ var SiteInfo = {
 var Books = [
   {
     Title: "Book 1: The Philosopher's Stone",
+    Cover: "Chapters/Book1/CoverArt.jpg",
     Status: "Complete",
     OriginalUrl: "https://www.wattpad.com/story/417160307-draca-malfoy-and-the-philosopher%27s-stone",
     Chapters: [
@@ -25,6 +26,7 @@ var Books = [
   },
   {
     Title: "Book 2: The Chamber of Secrets",
+    Cover: "Chapters/Book2/CoverArt.jpg",
     Status: "Complete",
     OriginalUrl: "https://www.wattpad.com/story/417161781-draca-malfoy-and-the-chamber-of-secrets",
     Chapters: [
@@ -43,6 +45,7 @@ var Books = [
   },
   {
     Title: "Book 3: The Prisoner of Azkaban",
+    Cover: "Chapters/Book3/CoverArt.jpg",
     Status: "Complete",
     Chapters: [
       { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" },
@@ -56,6 +59,7 @@ var Books = [
   },
   {
     Title: "Book 4: The Goblet of Fire",
+    Cover: "Chapters/Book4/CoverArt.jpg",
     Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417168432-draca-malfoy-and-the-goblet-of-fire",
     Chapters: [

@@ -373,7 +373,102 @@ function WatchMusic(Img, Chapter, PageIndex, ChapterIndex) {
   Watcher.observe(Img);
 }
 
+function CloseBook() {
+  var Open = document.getElementById("BookModal");
+  if (Open) Open.remove();
+  document.body.classList.remove("ModalOpen");
+  document.removeEventListener("keydown", BookKeys);
+}
+
+function BookKeys(Event) {
+  if (Event.key === "Escape") CloseBook();
+}
+
+function OpenBook(Book, BookIndex, FreshKeys, Marks) {
+  CloseBook();
+  var Overlay = Make("div", "ModalOverlay");
+  Overlay.id = "BookModal";
+  Overlay.onclick = function (Event) { if (Event.target === Overlay) CloseBook(); };
+  var Panel = Make("div", "ModalPanel");
+  Panel.setAttribute("role", "dialog");
+  Panel.setAttribute("aria-modal", "true");
+
+  var Head = Make("div", "ModalHead");
+  var CoverSrc = BookCover(Book);
+  if (CoverSrc) {
+    var BookArt = Make("img", "BookCover");
+    BookArt.src = CoverSrc;
+    BookArt.alt = "";
+    BookArt.onerror = function () { BookArt.remove(); };
+    Head.appendChild(BookArt);
+  }
+  var HeadText = Make("div", "BookHeadText");
+  HeadText.appendChild(Make("h2", "", Book.Title));
+  var Meta = Make("div", "BookMeta");
+  if (Book.Status) {
+    var Level = Book.Status.toLowerCase();
+    var StatusClass = Level === "complete" ? " Complete" : Level === "coming soon" ? " Soon" : " Ongoing";
+    Meta.appendChild(Make("span", "BookStatus" + StatusClass, Book.Status));
+  }
+  if (Book.Chapters.length) {
+    Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
+  }
+  HeadText.appendChild(Meta);
+  var BookLink = Book.OriginalUrl ? OriginalLink(Book.OriginalUrl, "BookLink") : null;
+  if (BookLink) HeadText.appendChild(BookLink);
+  Head.appendChild(HeadText);
+  var Close = Make("button", "ModalClose", "\u00d7");
+  Close.type = "button";
+  Close.setAttribute("aria-label", "Close");
+  Close.onclick = CloseBook;
+  Head.appendChild(Close);
+  Panel.appendChild(Head);
+
+  var Body = Make("div", "ModalBody");
+  if (!Book.Chapters.length) {
+    Body.appendChild(Make("div", "ComingSoon", "Chapters are on the way. Check back soon!"));
+  } else {
+    var List = Make("div", "List");
+    Book.Chapters.forEach(function (Chapter, ChapterIndex) {
+      var Entry = All.filter(function (Item) {
+        return Item.BookIndex === BookIndex && Item.ChapterIndex === ChapterIndex;
+      })[0];
+      var Row = Make("a", "Row");
+      Row.href = "#" + Entry.Key;
+      Row.onclick = function () { document.body.classList.remove("ModalOpen"); };
+      var Thumb = Make("img", "Thumb");
+      Thumb.src = ChapterThumb(Chapter);
+      Thumb.alt = "";
+      Thumb.loading = "lazy";
+      Thumb.onerror = function () { Thumb.style.visibility = "hidden"; };
+      Row.appendChild(Thumb);
+      var RowBodyNode = Make("span", "RowBody");
+      var TitleNode = Make("span", "RowTitle", Chapter.Title);
+      if (FreshKeys.indexOf(Entry.Key) >= 0) TitleNode.appendChild(Make("span", "NewTag", "New"));
+      var RowMark = Marks[Entry.Key];
+      if (RowMark && RowMark.Done) TitleNode.appendChild(Make("span", "ReadTag", "Read"));
+      else if (RowMark) TitleNode.appendChild(Make("span", "ReadTag Active", "Page " + (RowMark.Page + 1)));
+      RowBodyNode.appendChild(TitleNode);
+      var DateText = FormatDate(Chapter.Date);
+      if (DateText) RowBodyNode.appendChild(Make("span", "RowDate", DateText));
+      var Counts = Make("span", "RowCounts", "");
+      RowBodyNode.appendChild(Counts);
+      Row.appendChild(RowBodyNode);
+      Row.appendChild(Make("span", "RowNum", "#" + (ChapterIndex + 1)));
+      List.appendChild(Row);
+      LoadCounts(Entry, Counts);
+    });
+    Body.appendChild(List);
+  }
+  Panel.appendChild(Body);
+  Overlay.appendChild(Panel);
+  document.body.appendChild(Overlay);
+  document.body.classList.add("ModalOpen");
+  document.addEventListener("keydown", BookKeys);
+}
+
 function RenderHome() {
+  CloseBook();
   StopWatchingScroll();
   StopMusic();
   ShowMusicButton(false);
@@ -448,20 +543,24 @@ function RenderHome() {
     Wrap.appendChild(Banner);
   }
 
+  var Shelf = Make("div", "Shelf");
   Books.forEach(function (Book, BookIndex) {
-    var Section = Make("section", "Book");
-    var Head = Make("div", "BookHead");
+    var Card = Make("button", "BookCard");
+    Card.type = "button";
     var CoverSrc = BookCover(Book);
+    var Art = Make("div", "BookCardArt");
     if (CoverSrc) {
-      var BookArt = Make("img", "BookCover");
+      var BookArt = Make("img", "BookCardImg");
       BookArt.src = CoverSrc;
       BookArt.alt = "";
       BookArt.onerror = function () { BookArt.remove(); };
-      Head.appendChild(BookArt);
+      Art.appendChild(BookArt);
     }
-    var HeadText = Make("div", "BookHeadText");
-    HeadText.appendChild(Make("h2", "", Book.Title));
-    var Meta = Make("div", "BookMeta");
+    var HasNew = Fresh.some(function (Item) { return Item.BookIndex === BookIndex; });
+    if (HasNew) Art.appendChild(Make("span", "BookCardNew", "New"));
+    Card.appendChild(Art);
+    Card.appendChild(Make("span", "BookCardTitle", Book.Title));
+    var Meta = Make("span", "BookMeta");
     if (Book.Status) {
       var Level = Book.Status.toLowerCase();
       var StatusClass = Level === "complete" ? " Complete" : Level === "coming soon" ? " Soon" : " Ongoing";
@@ -470,50 +569,11 @@ function RenderHome() {
     if (Book.Chapters.length) {
       Meta.appendChild(Make("span", "BookCount", Book.Chapters.length + (Book.Chapters.length === 1 ? " chapter" : " chapters")));
     }
-    HeadText.appendChild(Meta);
-    var BookLink = Book.OriginalUrl ? OriginalLink(Book.OriginalUrl, "BookLink") : null;
-    if (BookLink) HeadText.appendChild(BookLink);
-    Head.appendChild(HeadText);
-    Section.appendChild(Head);
-
-    if (!Book.Chapters.length) {
-      Section.appendChild(Make("div", "ComingSoon", "Chapters are on the way. Check back soon!"));
-      Wrap.appendChild(Section);
-      return;
-    }
-
-    var List = Make("div", "List");
-    Book.Chapters.forEach(function (Chapter, ChapterIndex) {
-      var Entry = All.filter(function (Item) {
-        return Item.BookIndex === BookIndex && Item.ChapterIndex === ChapterIndex;
-      })[0];
-      var Row = Make("a", "Row");
-      Row.href = "#" + Entry.Key;
-      var Thumb = Make("img", "Thumb");
-      Thumb.src = ChapterThumb(Chapter);
-      Thumb.alt = "";
-      Thumb.loading = "lazy";
-      Thumb.onerror = function () { Thumb.style.visibility = "hidden"; };
-      Row.appendChild(Thumb);
-      var Body = Make("span", "RowBody");
-      var TitleNode = Make("span", "RowTitle", Chapter.Title);
-      if (FreshKeys.indexOf(Entry.Key) >= 0) TitleNode.appendChild(Make("span", "NewTag", "New"));
-      var RowMark = Marks[Entry.Key];
-      if (RowMark && RowMark.Done) TitleNode.appendChild(Make("span", "ReadTag", "Read"));
-      else if (RowMark) TitleNode.appendChild(Make("span", "ReadTag Active", "Page " + (RowMark.Page + 1)));
-      Body.appendChild(TitleNode);
-      var DateText = FormatDate(Chapter.Date);
-      if (DateText) Body.appendChild(Make("span", "RowDate", DateText));
-      var Counts = Make("span", "RowCounts", "");
-      Body.appendChild(Counts);
-      Row.appendChild(Body);
-      Row.appendChild(Make("span", "RowNum", "#" + (ChapterIndex + 1)));
-      List.appendChild(Row);
-      LoadCounts(Entry, Counts);
-    });
-    Section.appendChild(List);
-    Wrap.appendChild(Section);
+    Card.appendChild(Meta);
+    Card.onclick = function () { OpenBook(Book, BookIndex, FreshKeys, Marks); };
+    Shelf.appendChild(Card);
   });
+  Wrap.appendChild(Shelf);
 
   Wrap.appendChild(DisclaimerBox());
   Wrap.appendChild(Make("footer", "SiteFoot", "Draca \u00b7 written by inachane"));

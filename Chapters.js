@@ -111,7 +111,11 @@ var Books = [
       { Title: "Chapter 24: The Tower Roof", Folder: "Chapters/Book4/Chapter24", Date: "2026-10-20" },
       { Title: "Chapter 25: A Logistical Possibility", Folder: "Chapters/Book4/Chapter25", Date: "2026-10-20" },
       { Title: "Chapter 26: After the Maze", Folder: "Chapters/Book4/Chapter26", Date: "2026-10-20" },
-      { Title: "Chapter 27: The Graveyard", Folder: "Chapters/Book4/Chapter27", Date: "2026-10-20" }
+      { Title: "Chapter 27: The Graveyard", Folder: "Chapters/Book4/Chapter27", Date: "2026-10-20" },
+      { Title: "Chapter 28: Don't Let Go", Folder: "Chapters/Book4/Chapter28", Date: "2026-10-21" },
+      { Title: "Chapter 29: What Is Owed", Folder: "Chapters/Book4/Chapter29", Date: "2026-10-21" },
+      { Title: "Chapter 30: Chosen", Folder: "Chapters/Book4/Chapter30", Date: "2026-10-21" },
+      { Title: "Chapter 31: Four Chairs", Folder: "Chapters/Book4/Chapter31", Date: "2026-10-21" }
     ]
   }
 ];

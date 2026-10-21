@@ -47,6 +47,7 @@ var Books = [
     Title: "Book 3: The Prisoner of Azkaban",
     Cover: "Chapters/Book3/CoverArt.jpg",
     Status: "Complete",
+    OriginalUrl: "https://www.wattpad.com/story/417167669-draca-malfoy-and-the-prisoner-of-azkaban",
     Chapters: [
       { Title: "Chapter 1: Bow First", Folder: "Chapters/Book3/Chapter1", Date: "2026-10-17" },
       { Title: "Chapter 2: The Dementors", Folder: "Chapters/Book3/Chapter2", Date: "2026-10-17" },

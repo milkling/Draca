@@ -119,5 +119,11 @@ var Books = [
       { Title: "Chapter 31: Four Chairs", Folder: "Chapters/Book4/Chapter31", Date: "2026-10-21" },
       { Title: "Chapter 32: The Last Night", Folder: "Chapters/Book4/Chapter32", Date: "2026-10-21" }
     ]
+  },
+  {
+    Title: "Book 5: The Order of the Phoenix",
+    Cover: "Chapters/Book5/CoverArt.jpg",
+    Status: "Ongoing",
+    Chapters: []
   }
 ];

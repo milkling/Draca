@@ -56,6 +56,19 @@ function Publish(Item) {
   return { id: Item.id, name: Item.name, text: Item.text, time: Item.time, member: !!Item.member };
 }
 
+
+async function CachedGet(Context, Seconds, Build) {
+  var Cache = caches.default;
+  var Request = new Request(Context.request.url, { method: "GET" });
+  var Hit = await Cache.match(Request);
+  if (Hit) return Hit;
+  var Fresh = await Build();
+  var Copy = new Response(Fresh.body, Fresh);
+  Copy.headers.set("Cache-Control", "public, max-age=" + Seconds);
+  Context.waitUntil(Cache.put(Request, Copy.clone()));
+  return Copy;
+}
+
 async function Cooldown(Context, Store, Seconds) {
   var Address = Context.request.headers.get("CF-Connecting-IP") || "unknown";
   var Mark = "r" + (await Hash(Address)).slice(0, 24);
@@ -71,10 +84,12 @@ export async function onRequestGet(Context) {
   var Url = new URL(Context.request.url);
   var Keys = Url.searchParams.get("keys");
   if (Keys !== null) {
-    var Wanted = Keys.split(",").filter(function (Item) { return KeyPattern.test(Item); }).slice(0, 200);
-    var Counts = {};
-    for (var Each of Wanted) Counts[Each] = (await ReadList(Store, Each)).length;
-    return Reply({ counts: Counts });
+    return CachedGet(Context, 600, async function () {
+      var Wanted = Keys.split(",").filter(function (Item) { return KeyPattern.test(Item); }).slice(0, 200);
+      var Counts = {};
+      await Promise.all(Wanted.map(async function (Each) { Counts[Each] = (await ReadList(Store, Each)).length; }));
+      return Reply({ counts: Counts });
+    });
   }
   var Key = Url.searchParams.get("key") || "";
   if (!KeyPattern.test(Key)) return Reply({ error: "BadKey" }, 400);

@@ -251,12 +251,26 @@ function ResumeTo(Reader, Saved) {
 
 var HomeStats = null;
 
-function LoadCounts(Entry, Target) {
-  if (!HomeStats) {
-    var Keys = All.map(function (Item) { return Item.Key; });
-    HomeStats = Promise.all([ReadStats(Keys), ReadCommentCounts(Keys)]);
+function GetHomeStats() {
+  if (HomeStats) return HomeStats;
+  var Keys = All.map(function (Item) { return Item.Key; });
+  try {
+    var Saved = JSON.parse(StorageGet("HomeCache") || "null");
+    if (Saved && Saved.n === Keys.length && Date.now() - Saved.t < 600000) {
+      HomeStats = Promise.resolve([Saved.s, Saved.c]);
+      return HomeStats;
+    }
+  } catch (Failure) {
   }
-  HomeStats.then(function (Pair) {
+  HomeStats = Promise.all([ReadStats(Keys), ReadCommentCounts(Keys)]).then(function (Pair) {
+    if (Pair[0]) StorageSet("HomeCache", JSON.stringify({ t: Date.now(), n: Keys.length, s: Pair[0], c: Pair[1] }));
+    return Pair;
+  });
+  return HomeStats;
+}
+
+function LoadCounts(Entry, Target) {
+  GetHomeStats().then(function (Pair) {
     var Stats = Pair[0];
     var Counts = Pair[1];
     if (!Stats) { Target.textContent = ""; return; }
@@ -270,9 +284,7 @@ function LoadCounts(Entry, Target) {
 }
 
 function LoadBookTotals(BookIndex, Target) {
-  var Keys = All.map(function (Item) { return Item.Key; });
-  if (!HomeStats) HomeStats = Promise.all([ReadStats(Keys), ReadCommentCounts(Keys)]);
-  HomeStats.then(function (Pair) {
+  GetHomeStats().then(function (Pair) {
     var Stats = Pair[0];
     var Counts = Pair[1];
     if (!Stats) return;
@@ -924,9 +936,10 @@ function RenderChapter(Index) {
     PostStat(Entry.Key, Liked ? "like" : "unlike").then(ShowStats);
   };
   Title.appendChild(LikeButton);
-  if (SessionSeen("Viewed" + Entry.Key)) {
+  if (StorageGet("Viewed" + Entry.Key) === "1" || SessionSeen("Viewed" + Entry.Key)) {
     ReadStats([Entry.Key]).then(function (Stats) { if (Stats) ShowStats(Stats[Entry.Key]); });
   } else {
+    StorageSet("Viewed" + Entry.Key, "1");
     PostStat(Entry.Key, "view").then(ShowStats);
   }
   App.appendChild(Title);
@@ -1035,7 +1048,7 @@ async function CheckForUpdate() {
 }
 
 CheckForUpdate();
-setInterval(CheckForUpdate, 60000);
+setInterval(function () { if (document.visibilityState === "visible") CheckForUpdate(); }, 300000);
 document.addEventListener("visibilitychange", function () {
   if (document.visibilityState === "visible") CheckForUpdate();
 });

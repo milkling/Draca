@@ -7,6 +7,19 @@ function Reply(Body, Status) {
   });
 }
 
+
+async function CachedGet(Context, Seconds, Build) {
+  var Cache = caches.default;
+  var Request = new Request(Context.request.url, { method: "GET" });
+  var Hit = await Cache.match(Request);
+  if (Hit) return Hit;
+  var Fresh = await Build();
+  var Copy = new Response(Fresh.body, Fresh);
+  Copy.headers.set("Cache-Control", "public, max-age=" + Seconds);
+  Context.waitUntil(Cache.put(Request, Copy.clone()));
+  return Copy;
+}
+
 async function ReadStats(Store, Key) {
   var Views = parseInt(await Store.get("v" + Key), 10) || 0;
   var Likes = parseInt(await Store.get("l" + Key), 10) || 0;
@@ -16,13 +29,15 @@ async function ReadStats(Store, Key) {
 export async function onRequestGet(Context) {
   var Store = Context.env.STATS;
   if (!Store) return Reply({ error: "NoStore" }, 500);
-  var Url = new URL(Context.request.url);
-  var Keys = (Url.searchParams.get("keys") || "").split(",").filter(function (Key) {
-    return KeyPattern.test(Key);
-  }).slice(0, 200);
-  var Result = {};
-  for (var Key of Keys) Result[Key] = await ReadStats(Store, Key);
-  return Reply(Result);
+  return CachedGet(Context, 600, async function () {
+    var Url = new URL(Context.request.url);
+    var Keys = (Url.searchParams.get("keys") || "").split(",").filter(function (Key) {
+      return KeyPattern.test(Key);
+    }).slice(0, 200);
+    var Result = {};
+    await Promise.all(Keys.map(async function (Key) { Result[Key] = await ReadStats(Store, Key); }));
+    return Reply(Result);
+  });
 }
 
 export async function onRequestPost(Context) {

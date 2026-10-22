@@ -59,13 +59,13 @@ function Publish(Item) {
 
 async function CachedGet(Context, Seconds, Build) {
   var Cache = caches.default;
-  var Request = new Request(Context.request.url, { method: "GET" });
-  var Hit = await Cache.match(Request);
+  var CacheKey = new Request(Context.request.url, { method: "GET" });
+  var Hit = await Cache.match(CacheKey);
   if (Hit) return Hit;
   var Fresh = await Build();
   var Copy = new Response(Fresh.body, Fresh);
   Copy.headers.set("Cache-Control", "public, max-age=" + Seconds);
-  Context.waitUntil(Cache.put(Request, Copy.clone()));
+  Context.waitUntil(Cache.put(CacheKey, Copy.clone()));
   return Copy;
 }
 

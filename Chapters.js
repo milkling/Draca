@@ -127,7 +127,11 @@ var Books = [
     Chapters: [
       { Title: "Chapter 1: Letters on Tuesdays", Folder: "Chapters/Book5/Chapter1", Date: "2026-10-22" },
       { Title: "Chapter 2: A Very Cold Sea", Folder: "Chapters/Book5/Chapter2", Date: "2026-10-22" },
-      { Title: "Chapter 3: Skipping Stones", Folder: "Chapters/Book5/Chapter3", Date: "2026-10-22" }
+      { Title: "Chapter 3: Skipping Stones", Folder: "Chapters/Book5/Chapter3", Date: "2026-10-22" },
+      { Title: "Chapter 4: Number Twelve", Folder: "Chapters/Book5/Chapter4", Date: "2026-10-22" },
+      { Title: "Chapter 5: Use Owls", Folder: "Chapters/Book5/Chapter5", Date: "2026-10-22" },
+      { Title: "Chapter 6: A Black in My House", Folder: "Chapters/Book5/Chapter6", Date: "2026-10-22" },
+      { Title: "Chapter 7: Salt in the Pudding", Folder: "Chapters/Book5/Chapter7", Date: "2026-10-22" }
     ]
   }
 ];

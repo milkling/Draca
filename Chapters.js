@@ -124,6 +124,10 @@ var Books = [
     Title: "Book 5: The Order of the Phoenix",
     Cover: "Chapters/Book5/CoverArt.jpg",
     Status: "Ongoing",
-    Chapters: []
+    Chapters: [
+      { Title: "Chapter 1: Letters on Tuesdays", Folder: "Chapters/Book5/Chapter1", Date: "2026-10-22" },
+      { Title: "Chapter 2: A Very Cold Sea", Folder: "Chapters/Book5/Chapter2", Date: "2026-10-22" },
+      { Title: "Chapter 3: Skipping Stones", Folder: "Chapters/Book5/Chapter3", Date: "2026-10-22" }
+    ]
   }
 ];

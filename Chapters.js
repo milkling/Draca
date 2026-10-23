@@ -131,7 +131,16 @@ var Books = [
       { Title: "Chapter 4: Number Twelve", Folder: "Chapters/Book5/Chapter4", Date: "2026-10-22" },
       { Title: "Chapter 5: Use Owls", Folder: "Chapters/Book5/Chapter5", Date: "2026-10-22" },
       { Title: "Chapter 6: A Black in My House", Folder: "Chapters/Book5/Chapter6", Date: "2026-10-22" },
-      { Title: "Chapter 7: Salt in the Pudding", Folder: "Chapters/Book5/Chapter7", Date: "2026-10-22" }
+      { Title: "Chapter 7: Salt in the Pudding", Folder: "Chapters/Book5/Chapter7", Date: "2026-10-22" },
+      { Title: "Chapter 8: Courtroom Ten", Folder: "Chapters/Book5/Chapter8", Date: "2026-10-23" },
+      { Title: "Chapter 9: Cleared", Folder: "Chapters/Book5/Chapter9", Date: "2026-10-23" },
+      { Title: "Chapter 10: Platform Nine", Folder: "Chapters/Book5/Chapter10", Date: "2026-10-23" },
+      { Title: "Chapter 11: Gold With Green", Folder: "Chapters/Book5/Chapter11", Date: "2026-10-23" },
+      { Title: "Chapter 12: I Must Not Tell Lies", Folder: "Chapters/Book5/Chapter12", Date: "2026-10-23" },
+      { Title: "Chapter 13: Dittany", Folder: "Chapters/Book5/Chapter13", Date: "2026-10-23" },
+      { Title: "Chapter 14: Rules Are My Favorite", Folder: "Chapters/Book5/Chapter14", Date: "2026-10-23" },
+      { Title: "Chapter 15: Eyes", Folder: "Chapters/Book5/Chapter15", Date: "2026-10-23" },
+      { Title: "Chapter 16: Signed", Folder: "Chapters/Book5/Chapter16", Date: "2026-10-23" }
     ]
   }
 ];

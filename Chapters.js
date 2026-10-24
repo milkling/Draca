@@ -140,7 +140,12 @@ var Books = [
       { Title: "Chapter 13: Dittany", Folder: "Chapters/Book5/Chapter13", Date: "2026-10-23" },
       { Title: "Chapter 14: Rules Are My Favorite", Folder: "Chapters/Book5/Chapter14", Date: "2026-10-23" },
       { Title: "Chapter 15: Eyes", Folder: "Chapters/Book5/Chapter15", Date: "2026-10-23" },
-      { Title: "Chapter 16: Signed", Folder: "Chapters/Book5/Chapter16", Date: "2026-10-23" }
+      { Title: "Chapter 16: Signed", Folder: "Chapters/Book5/Chapter16", Date: "2026-10-23" },
+      { Title: "Chapter 17: Signal", Folder: "Chapters/Book5/Chapter17", Date: "2026-10-24" },
+      { Title: "Chapter 18: Toast", Folder: "Chapters/Book5/Chapter18", Date: "2026-10-24" },
+      { Title: "Chapter 19: Madam Puddifoot's", Folder: "Chapters/Book5/Chapter19", Date: "2026-10-24" },
+      { Title: "Chapter 20: The Whole Face", Folder: "Chapters/Book5/Chapter20", Date: "2026-10-24" },
+      { Title: "Chapter 21: Three or More", Folder: "Chapters/Book5/Chapter21", Date: "2026-10-24" }
     ]
   }
 ];

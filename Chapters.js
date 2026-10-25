@@ -155,7 +155,13 @@ var Books = [
       { Title: "Chapter 28: Good Evening, Cornelius", Folder: "Chapters/Book5/Chapter28", Date: "2026-10-26" },
       { Title: "Chapter 29: The Headmistress", Folder: "Chapters/Book5/Chapter29", Date: "2026-10-26" },
       { Title: "Chapter 30: The Other Signal", Folder: "Chapters/Book5/Chapter30", Date: "2026-10-26" },
-      { Title: "Chapter 31: Our Rock", Folder: "Chapters/Book5/Chapter31", Date: "2026-10-26" }
+      { Title: "Chapter 31: Our Rock", Folder: "Chapters/Book5/Chapter31", Date: "2026-10-26" },
+      { Title: "Chapter 32: Evidence", Folder: "Chapters/Book5/Chapter32", Date: "2026-10-27" },
+      { Title: "Chapter 33: A Loan", Folder: "Chapters/Book5/Chapter33", Date: "2026-10-27" },
+      { Title: "Chapter 34: The Grand Exit", Folder: "Chapters/Book5/Chapter34", Date: "2026-10-27" },
+      { Title: "Chapter 35: The Department of Mysteries", Folder: "Chapters/Book5/Chapter35", Date: "2026-10-27" },
+      { Title: "Chapter 36: The Veil", Folder: "Chapters/Book5/Chapter36", Date: "2026-10-27" },
+      { Title: "Chapter 37: The Long Way Home", Folder: "Chapters/Book5/Chapter37", Date: "2026-10-27" }
     ]
   }
 ];

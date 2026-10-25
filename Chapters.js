@@ -145,7 +145,12 @@ var Books = [
       { Title: "Chapter 18: Toast", Folder: "Chapters/Book5/Chapter18", Date: "2026-10-24" },
       { Title: "Chapter 19: Madam Puddifoot's", Folder: "Chapters/Book5/Chapter19", Date: "2026-10-24" },
       { Title: "Chapter 20: The Whole Face", Folder: "Chapters/Book5/Chapter20", Date: "2026-10-24" },
-      { Title: "Chapter 21: Three or More", Folder: "Chapters/Book5/Chapter21", Date: "2026-10-24" }
+      { Title: "Chapter 21: Three or More", Folder: "Chapters/Book5/Chapter21", Date: "2026-10-24" },
+      { Title: "Chapter 22: The Room Without a Door", Folder: "Chapters/Book5/Chapter22", Date: "2026-10-25" },
+      { Title: "Chapter 23: Reputation", Folder: "Chapters/Book5/Chapter23", Date: "2026-10-25" },
+      { Title: "Chapter 24: Something Happy", Folder: "Chapters/Book5/Chapter24", Date: "2026-10-25" },
+      { Title: "Chapter 25: Honey on a Roll", Folder: "Chapters/Book5/Chapter25", Date: "2026-10-25" },
+      { Title: "Chapter 26: Sneak", Folder: "Chapters/Book5/Chapter26", Date: "2026-10-25" }
     ]
   }
 ];

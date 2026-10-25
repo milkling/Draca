@@ -150,7 +150,12 @@ var Books = [
       { Title: "Chapter 23: Reputation", Folder: "Chapters/Book5/Chapter23", Date: "2026-10-25" },
       { Title: "Chapter 24: Something Happy", Folder: "Chapters/Book5/Chapter24", Date: "2026-10-25" },
       { Title: "Chapter 25: Honey on a Roll", Folder: "Chapters/Book5/Chapter25", Date: "2026-10-25" },
-      { Title: "Chapter 26: Sneak", Folder: "Chapters/Book5/Chapter26", Date: "2026-10-25" }
+      { Title: "Chapter 26: Sneak", Folder: "Chapters/Book5/Chapter26", Date: "2026-10-25" },
+      { Title: "Chapter 27: I Have You", Folder: "Chapters/Book5/Chapter27", Date: "2026-10-26" },
+      { Title: "Chapter 28: Good Evening, Cornelius", Folder: "Chapters/Book5/Chapter28", Date: "2026-10-26" },
+      { Title: "Chapter 29: The Headmistress", Folder: "Chapters/Book5/Chapter29", Date: "2026-10-26" },
+      { Title: "Chapter 30: The Other Signal", Folder: "Chapters/Book5/Chapter30", Date: "2026-10-26" },
+      { Title: "Chapter 31: Our Rock", Folder: "Chapters/Book5/Chapter31", Date: "2026-10-26" }
     ]
   }
 ];

@@ -511,6 +511,7 @@ function RenderHome() {
   var FreshKeys = Fresh.map(function (Item) { return Item.Key; });
   document.title = (Fresh.length ? "(" + Fresh.length + ") " : "") + SiteInfo.Title;
   Nav.innerHTML = "";
+  if (GetAuthorKey()) Nav.appendChild(Link("All comments", "#Comments", ""));
   App.innerHTML = "";
   var Wrap = Make("div", "Home");
 
@@ -653,8 +654,128 @@ var CommentErrors = {
   Empty: "Write something first.",
   TooLong: "That comment is too long.",
   Offline: "Could not reach the server.",
-  NoStore: "Comments are not set up yet."
+  NoStore: "Comments are not set up yet.",
+  BadAdmin: "That author key is not right, or AdminKey is not set in Cloudflare.",
+  TooMany: "That comment already has the maximum number of replies."
 };
+
+function GetAuthorKey() {
+  return StorageGet("AuthorKey") || "";
+}
+
+function CommentCard(Item, Options) {
+  var AuthorKey = GetAuthorKey();
+  var Card = Make("div", "CommentItem" + (Item.author ? " ByAuthor" : ""));
+  var Top = Make("div", "CommentTop");
+  Top.appendChild(Make("span", "CommentName" + (Item.author ? " Author" : Item.member ? " Member" : ""), Item.name));
+  if (Item.author) Top.appendChild(Make("span", "CommentBadge", "Author"));
+  Top.appendChild(Make("span", "CommentTime", TimeAgo(Item.time)));
+  if (Item.liked) Top.appendChild(Make("span", "CommentLiked", "\u2665 Liked by the author"));
+
+  var Mine = !AuthorKey && Item.member && Options.Name && Item.name.toLowerCase() === Options.Name.toLowerCase();
+  if (AuthorKey || Mine) {
+    var Remove = Make("button", "CommentRemove", "Delete");
+    Remove.type = "button";
+    Remove.onclick = function () {
+      var Payload = { action: "delete", key: Options.Key, id: Item.id };
+      if (AuthorKey) Payload.admin = AuthorKey;
+      else { Payload.name = Options.Name; Payload.token = Options.Token; }
+      PostJson("/api/Comments", Payload).then(function (Data) {
+        if (Data.ok) Options.Removed(Item);
+        else Options.Say(CommentErrors[Data.error] || "Something went wrong.", true);
+      });
+    };
+    Top.appendChild(Remove);
+  }
+  Card.appendChild(Top);
+  Card.appendChild(Make("div", "CommentText", Item.text));
+
+  var Replies = Item.replies || [];
+  if (Replies.length) {
+    var Thread = Make("div", "CommentReplies");
+    Replies.forEach(function (Reply) {
+      var Line = Make("div", "CommentReply");
+      var Head = Make("div", "CommentTop");
+      Head.appendChild(Make("span", "CommentName Author", SiteInfo.AuthorName || "Author"));
+      Head.appendChild(Make("span", "CommentBadge", "Author"));
+      Head.appendChild(Make("span", "CommentTime", TimeAgo(Reply.time)));
+      if (AuthorKey) {
+        var Gone = Make("button", "CommentRemove", "Delete");
+        Gone.type = "button";
+        Gone.onclick = function () {
+          PostJson("/api/Comments", { action: "unreply", key: Options.Key, id: Item.id, replyId: Reply.id, admin: AuthorKey }).then(function (Data) {
+            if (Data.ok) {
+              Item.replies = Item.replies.filter(function (Other) { return Other.id !== Reply.id; });
+              Options.Changed();
+            } else {
+              Options.Say(CommentErrors[Data.error] || "Something went wrong.", true);
+            }
+          });
+        };
+        Head.appendChild(Gone);
+      }
+      Line.appendChild(Head);
+      Line.appendChild(Make("div", "CommentText", Reply.text));
+      Thread.appendChild(Line);
+    });
+    Card.appendChild(Thread);
+  }
+
+  if (AuthorKey) {
+    var Actions = Make("div", "CommentActions");
+    var Like = Make("button", "CommentAct" + (Item.liked ? " On" : ""), Item.liked ? "\u2665 Liked" : "\u2661 Like");
+    Like.type = "button";
+    Like.onclick = function () {
+      Like.disabled = true;
+      PostJson("/api/Comments", { action: "like", key: Options.Key, id: Item.id, admin: AuthorKey }).then(function (Data) {
+        if (typeof Data.liked === "boolean") {
+          Item.liked = Data.liked;
+          Options.Changed();
+        } else {
+          Like.disabled = false;
+          Options.Say(CommentErrors[Data.error] || "Something went wrong.", true);
+        }
+      });
+    };
+    var Answer = Make("button", "CommentAct", "Reply");
+    Answer.type = "button";
+    Actions.appendChild(Like);
+    Actions.appendChild(Answer);
+    Card.appendChild(Actions);
+
+    var Box = null;
+    Answer.onclick = function () {
+      if (Box) { Box.remove(); Box = null; return; }
+      Box = Make("form", "CommentReplyForm");
+      var Area = Make("textarea", "CommentField");
+      Area.rows = 2;
+      Area.maxLength = 1000;
+      Area.placeholder = "Reply as the author...";
+      var Send = Make("button", "CommentSubmit", "Send");
+      Send.type = "submit";
+      Box.appendChild(Area);
+      Box.appendChild(Send);
+      Box.onsubmit = function (Event) {
+        Event.preventDefault();
+        var Words = Area.value.trim();
+        if (!Words) return;
+        Send.disabled = true;
+        PostJson("/api/Comments", { action: "reply", key: Options.Key, id: Item.id, text: Words, admin: AuthorKey }).then(function (Data) {
+          if (Data.reply) {
+            Item.replies = (Item.replies || []).concat([Data.reply]);
+            Options.Changed();
+          } else {
+            Send.disabled = false;
+            Options.Say(CommentErrors[Data.error] || "Something went wrong.", true);
+          }
+        });
+      };
+      Card.appendChild(Box);
+      Area.focus();
+    };
+  }
+  return Card;
+}
 
 function AddComments(Entry) {
   var Box = Make("section", "Comments");
@@ -703,33 +824,33 @@ function AddComments(Entry) {
       return;
     }
     Comments.slice().reverse().forEach(function (Item) {
-      var Card = Make("div", "CommentItem");
-      var Top = Make("div", "CommentTop");
-      Top.appendChild(Make("span", "CommentName" + (Item.member ? " Member" : ""), Item.name));
-      Top.appendChild(Make("span", "CommentTime", TimeAgo(Item.time)));
-      if (Item.member && Name && Item.name.toLowerCase() === Name.toLowerCase()) {
-        var Remove = Make("button", "CommentRemove", "Delete");
-        Remove.type = "button";
-        Remove.onclick = function () {
-          PostJson("/api/Comments", { action: "delete", key: Entry.Key, id: Item.id, name: Name, token: Token }).then(function (Data) {
-            if (Data.ok) {
-              Comments = Comments.filter(function (Other) { return Other.id !== Item.id; });
-              ShowList();
-            } else {
-              Say(ErrorText(Data), true);
-            }
-          });
-        };
-        Top.appendChild(Remove);
-      }
-      Card.appendChild(Top);
-      Card.appendChild(Make("div", "CommentText", Item.text));
-      ListBox.appendChild(Card);
+      ListBox.appendChild(CommentCard(Item, {
+        Key: Entry.Key,
+        Name: Name,
+        Token: Token,
+        Say: Say,
+        Changed: ShowList,
+        Removed: function (Gone) {
+          Comments = Comments.filter(function (Other) { return Other.id !== Gone.id; });
+          ShowList();
+        }
+      }));
     });
   }
 
   function ShowAccount() {
     Account.innerHTML = "";
+    if (GetAuthorKey()) {
+      var Boss = Make("div", "CommentLine");
+      Boss.appendChild(Make("span", "", "Posting as "));
+      Boss.appendChild(Make("strong", "", SiteInfo.AuthorName || "Author"));
+      Boss.appendChild(Make("span", "CommentBadge", "Author"));
+      var Every = Make("a", "CommentLink", "All comments");
+      Every.href = "#Comments";
+      Boss.appendChild(Every);
+      Account.appendChild(Boss);
+      return;
+    }
     if (Name && Token) {
       var Line = Make("div", "CommentLine");
       Line.appendChild(Make("span", "", "Posting as "));
@@ -821,7 +942,9 @@ function AddComments(Entry) {
     if (!Text) { Say(CommentErrors.Empty, true); return; }
     Submit.disabled = true;
     var Payload = { action: "post", key: Entry.Key, text: Text };
-    if (Name && Token) {
+    if (GetAuthorKey()) {
+      Payload.admin = GetAuthorKey();
+    } else if (Name && Token) {
       Payload.name = Name;
       Payload.token = Token;
     }
@@ -984,7 +1107,191 @@ function RenderChapter(Index) {
   window.scrollTo(0, 0);
 }
 
+function RenderAuthor() {
+  CloseBook();
+  StopWatchingScroll();
+  StopMusic();
+  ShowMusicButton(false);
+  document.title = "Author - " + SiteInfo.Title;
+  Nav.innerHTML = "";
+  Nav.appendChild(Link("Home", "#", ""));
+  App.innerHTML = "";
+  var Wrap = Make("section", "AuthorPanel");
+  Wrap.appendChild(Make("h2", "", "Author sign-in"));
+  if (GetAuthorKey()) {
+    Wrap.appendChild(Make("p", "CommentStatus", "You are signed in as the author on this device."));
+    var Go = Link("Open all comments", "#Comments", "");
+    var Out = Make("button", "CommentSubmit", "Sign out");
+    Out.type = "button";
+    Out.onclick = function () {
+      StorageSet("AuthorKey", null);
+      location.hash = "#";
+    };
+    Wrap.appendChild(Go);
+    Wrap.appendChild(Out);
+    App.appendChild(Wrap);
+    return;
+  }
+  var Form = Make("form", "CommentJoin");
+  var Input = Make("input", "CommentInput");
+  Input.type = "password";
+  Input.placeholder = "Author key";
+  Input.autocomplete = "off";
+  var Submit = Make("button", "CommentSubmit", "Sign in");
+  Submit.type = "submit";
+  var Status = Make("div", "CommentStatus", "");
+  Form.appendChild(Input);
+  Form.appendChild(Submit);
+  Wrap.appendChild(Form);
+  Wrap.appendChild(Status);
+  Form.onsubmit = function (Event) {
+    Event.preventDefault();
+    var Typed = Input.value.trim();
+    if (!Typed) return;
+    Submit.disabled = true;
+    PostJson("/api/Comments", { action: "adminlogin", admin: Typed }).then(function (Data) {
+      Submit.disabled = false;
+      if (Data.ok) {
+        StorageSet("AuthorKey", Typed);
+        location.hash = "#Comments";
+      } else {
+        Status.className = "CommentStatus Bad";
+        Status.textContent = CommentErrors[Data.error] || "Something went wrong.";
+      }
+    });
+  };
+  App.appendChild(Wrap);
+}
+
+function RenderAllComments() {
+  CloseBook();
+  StopWatchingScroll();
+  StopMusic();
+  ShowMusicButton(false);
+  if (!GetAuthorKey()) { location.hash = "#Author"; return; }
+  document.title = "All comments - " + SiteInfo.Title;
+  Nav.innerHTML = "";
+  Nav.appendChild(Link("Home", "#", ""));
+  App.innerHTML = "";
+  window.scrollTo(0, 0);
+
+  var Wrap = Make("section", "Comments Moderation");
+  var Head = Make("h3", "CommentsHead", "All comments");
+  var Bar = Make("div", "ModBar");
+  var Pick = Make("select", "ModSelect");
+  var Unanswered = Make("label", "ModCheck");
+  var Tick = Make("input");
+  Tick.type = "checkbox";
+  Unanswered.appendChild(Tick);
+  Unanswered.appendChild(document.createTextNode(" Not replied to yet"));
+  var Refresh = Make("button", "CommentLink", "Refresh");
+  Refresh.type = "button";
+  var Status = Make("span", "CommentStatus", "");
+  Bar.appendChild(Pick);
+  Bar.appendChild(Unanswered);
+  Bar.appendChild(Refresh);
+  Bar.appendChild(Status);
+  var ListBox = Make("div", "CommentList");
+  Wrap.appendChild(Head);
+  Wrap.appendChild(Bar);
+  Wrap.appendChild(ListBox);
+  App.appendChild(Wrap);
+
+  var Data = null;
+
+  function Say(Text, Bad) {
+    Status.textContent = Text || "";
+    Status.className = "CommentStatus" + (Bad ? " Bad" : "");
+  }
+
+  function Label(Key) {
+    var Found = All.filter(function (Item) { return Item.Key === Key; })[0];
+    if (!Found) return Key;
+    return Found.Book.Title.split(":")[0] + " \u00b7 " + Found.Chapter.Title;
+  }
+
+  function FillPicker(Keep) {
+    Pick.innerHTML = "";
+    var Total = 0;
+    var Keys = Object.keys(Data);
+    Keys.forEach(function (Key) { Total += Data[Key].length; });
+    var Every = Make("option", "", "All chapters (" + Total + ")");
+    Every.value = "";
+    Pick.appendChild(Every);
+    All.forEach(function (Item) {
+      var Rows = Data[Item.Key];
+      if (!Rows || !Rows.length) return;
+      var Choice = Make("option", "", Label(Item.Key) + " (" + Rows.length + ")");
+      Choice.value = Item.Key;
+      Pick.appendChild(Choice);
+    });
+    Pick.value = Data[Keep] ? Keep : "";
+  }
+
+  function Draw() {
+    ListBox.innerHTML = "";
+    var Rows = [];
+    Object.keys(Data).forEach(function (Key) {
+      if (Pick.value && Pick.value !== Key) return;
+      Data[Key].forEach(function (Item) { Rows.push({ Key: Key, Item: Item }); });
+    });
+    if (Tick.checked) {
+      Rows = Rows.filter(function (Row) { return !Row.Item.author && !(Row.Item.replies || []).length; });
+    }
+    Rows.sort(function (A, B) { return B.Item.time - A.Item.time; });
+    Head.textContent = "All comments (" + Rows.length + ")";
+    if (!Rows.length) {
+      ListBox.appendChild(Make("div", "CommentEmpty", "Nothing here."));
+      return;
+    }
+    Rows.forEach(function (Row) {
+      var Wrapper = Make("div", "ModEntry");
+      var Where = Make("a", "ModWhere", Label(Row.Key));
+      Where.href = "#" + Row.Key;
+      Wrapper.appendChild(Where);
+      Wrapper.appendChild(CommentCard(Row.Item, {
+        Key: Row.Key,
+        Say: Say,
+        Changed: Draw,
+        Removed: function (Gone) {
+          Data[Row.Key] = Data[Row.Key].filter(function (Other) { return Other.id !== Gone.id; });
+          if (!Data[Row.Key].length) delete Data[Row.Key];
+          FillPicker(Pick.value);
+          Draw();
+        }
+      }));
+      ListBox.appendChild(Wrapper);
+    });
+  }
+
+  function Load() {
+    Say("Loading...", false);
+    PostJson("/api/Comments", { action: "all", admin: GetAuthorKey() }).then(function (Result) {
+      if (!Result.chapters) {
+        if (Result.error === "BadAdmin") {
+          StorageSet("AuthorKey", null);
+          location.hash = "#Author";
+          return;
+        }
+        Say(CommentErrors[Result.error] || "Could not load comments.", true);
+        return;
+      }
+      Say("");
+      Data = Result.chapters;
+      FillPicker(Pick.value);
+      Draw();
+    });
+  }
+
+  Pick.onchange = Draw;
+  Tick.onchange = Draw;
+  Refresh.onclick = Load;
+  Load();
+}
+
 function Route() {
+  if (location.hash === "#Author") { RenderAuthor(); return; }
+  if (location.hash === "#Comments") { RenderAllComments(); return; }
   var Index = FindByHash();
   if (Index < 0) RenderHome();
   else RenderChapter(Index);

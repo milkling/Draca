@@ -53,7 +53,27 @@ async function Verify(Store, Name, Token) {
 }
 
 function Publish(Item) {
-  return { id: Item.id, name: Item.name, text: Item.text, time: Item.time, member: !!Item.member };
+  return {
+    id: Item.id,
+    name: Item.name,
+    text: Item.text,
+    time: Item.time,
+    member: !!Item.member,
+    author: !!Item.author,
+    liked: !!Item.liked,
+    replies: (Item.replies || []).map(function (Each) {
+      return { id: Each.id, text: Each.text, time: Each.time };
+    })
+  };
+}
+
+function IsAdmin(Context, Body) {
+  var Secret = Context.env.AdminKey;
+  return !!Secret && typeof Body.admin === "string" && Body.admin === Secret;
+}
+
+function CleanText(Value) {
+  return String(Value || "").replace(/\r/g, "").trim();
 }
 
 
@@ -117,10 +137,37 @@ export async function onRequestPost(Context) {
     return Reply({ name: Wanted, token: Token });
   }
 
+  if (Action === "adminlogin") {
+    if (!(await Cooldown(Context, Store, 3))) return Reply({ error: "Slow" }, 429);
+    if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
+    return Reply({ ok: true, name: Context.env.AuthorName || "Inachane" });
+  }
+
+  if (Action === "all") {
+    if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
+    var Found = [];
+    var Cursor = undefined;
+    for (var Round = 0; Round < 10; Round++) {
+      var Page = await Store.list({ prefix: "c", cursor: Cursor });
+      Page.keys.forEach(function (Each) {
+        if (KeyPattern.test(Each.name.slice(1))) Found.push(Each.name.slice(1));
+      });
+      if (Page.list_complete) break;
+      Cursor = Page.cursor;
+    }
+    Found = Found.slice(0, 400);
+    var Chapters = {};
+    await Promise.all(Found.map(async function (Each) {
+      var Rows = await ReadList(Store, Each);
+      if (Rows.length) Chapters[Each] = Rows.map(Publish);
+    }));
+    return Reply({ chapters: Chapters });
+  }
+
   if (Action === "login") {
-    var Found = await Verify(Store, String(Body.name || "").trim(), Body.token);
-    if (!Found) return Reply({ error: "BadLogin" }, 401);
-    return Reply({ name: Found.name, token: String(Body.token).trim().toUpperCase() });
+    var Account = await Verify(Store, String(Body.name || "").trim(), Body.token);
+    if (!Account) return Reply({ error: "BadLogin" }, 401);
+    return Reply({ name: Account.name, token: String(Body.token).trim().toUpperCase() });
   }
 
   var Key = Body.key;
@@ -132,13 +179,19 @@ export async function onRequestPost(Context) {
     if (Text.length > MaxLength) return Reply({ error: "TooLong" }, 400);
     var Name = "Anonymous";
     var Member = false;
-    if (Body.name) {
+    var AsAuthor = false;
+    if (Body.admin) {
+      if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
+      Name = Context.env.AuthorName || "Inachane";
+      Member = true;
+      AsAuthor = true;
+    } else if (Body.name) {
       var Owner = await Verify(Store, String(Body.name).trim(), Body.token);
       if (!Owner) return Reply({ error: "BadLogin" }, 401);
       Name = Owner.name;
       Member = true;
     }
-    if (!(await Cooldown(Context, Store, 8))) return Reply({ error: "Slow" }, 429);
+    if (!AsAuthor && !(await Cooldown(Context, Store, 8))) return Reply({ error: "Slow" }, 429);
     var List = await ReadList(Store, Key);
     var Item = {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
@@ -147,7 +200,8 @@ export async function onRequestPost(Context) {
       time: Date.now(),
       member: Member
     };
-    if (Member) Item.owner = await Hash(Name.toLowerCase());
+    if (AsAuthor) Item.author = true;
+    else if (Member) Item.owner = await Hash(Name.toLowerCase());
     List.push(Item);
     if (List.length > MaxComments) List = List.slice(List.length - MaxComments);
     await Store.put("c" + Key, JSON.stringify(List));
@@ -158,16 +212,42 @@ export async function onRequestPost(Context) {
     var Current = await ReadList(Store, Key);
     var Target = Current.filter(function (Entry) { return Entry.id === Body.id; })[0];
     if (!Target) return Reply({ error: "Missing" }, 404);
-    var IsAdmin = !!Context.env.AdminKey && Body.admin === Context.env.AdminKey;
+    var IsBoss = IsAdmin(Context, Body);
     var IsOwner = false;
     if (Target.owner && Body.name) {
       var Check = await Verify(Store, String(Body.name).trim(), Body.token);
       IsOwner = !!Check && (await Hash(Check.name.toLowerCase())) === Target.owner;
     }
-    if (!IsAdmin && !IsOwner) return Reply({ error: "Forbidden" }, 403);
+    if (!IsBoss && !IsOwner) return Reply({ error: "Forbidden" }, 403);
     var Kept = Current.filter(function (Entry) { return Entry.id !== Body.id; });
     await Store.put("c" + Key, JSON.stringify(Kept));
     return Reply({ ok: true });
+  }
+
+  if (Action === "like" || Action === "reply" || Action === "unreply") {
+    if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
+    var Rows = await ReadList(Store, Key);
+    var Row = Rows.filter(function (Entry) { return Entry.id === Body.id; })[0];
+    if (!Row) return Reply({ error: "Missing" }, 404);
+    var Result = {};
+    if (Action === "like") {
+      Row.liked = !Row.liked;
+      Result.liked = Row.liked;
+    } else if (Action === "reply") {
+      var Words = CleanText(Body.text);
+      if (!Words) return Reply({ error: "Empty" }, 400);
+      if (Words.length > MaxLength) return Reply({ error: "TooLong" }, 400);
+      Row.replies = Row.replies || [];
+      if (Row.replies.length >= 30) return Reply({ error: "TooMany" }, 400);
+      var Made = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), text: Words, time: Date.now() };
+      Row.replies.push(Made);
+      Result.reply = { id: Made.id, text: Made.text, time: Made.time };
+    } else {
+      Row.replies = (Row.replies || []).filter(function (Each) { return Each.id !== Body.replyId; });
+      Result.ok = true;
+    }
+    await Store.put("c" + Key, JSON.stringify(Rows));
+    return Reply(Result);
   }
 
   return Reply({ error: "BadAction" }, 400);

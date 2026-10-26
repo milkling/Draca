@@ -123,7 +123,7 @@ var Books = [
   {
     Title: "Book 5: The Order of the Phoenix",
     Cover: "Chapters/Book5/CoverArt.jpg",
-    Status: "Ongoing",
+    Status: "Complete",
     Chapters: [
       { Title: "Chapter 1: Letters on Tuesdays", Folder: "Chapters/Book5/Chapter1", Date: "2026-10-22" },
       { Title: "Chapter 2: A Very Cold Sea", Folder: "Chapters/Book5/Chapter2", Date: "2026-10-22" },
@@ -161,7 +161,9 @@ var Books = [
       { Title: "Chapter 34: The Grand Exit", Folder: "Chapters/Book5/Chapter34", Date: "2026-10-27" },
       { Title: "Chapter 35: The Department of Mysteries", Folder: "Chapters/Book5/Chapter35", Date: "2026-10-27" },
       { Title: "Chapter 36: The Veil", Folder: "Chapters/Book5/Chapter36", Date: "2026-10-27" },
-      { Title: "Chapter 37: The Long Way Home", Folder: "Chapters/Book5/Chapter37", Date: "2026-10-27" }
+      { Title: "Chapter 37: The Long Way Home", Folder: "Chapters/Book5/Chapter37", Date: "2026-10-27" },
+      { Title: "Chapter 38: What Was Left", Folder: "Chapters/Book5/Chapter38", Date: "2026-10-28" },
+      { Title: "Chapter 39: Hello, My Dear", Folder: "Chapters/Book5/Chapter39", Date: "2026-10-28" }
     ]
   }
 ];

@@ -174,7 +174,13 @@ var Books = [
     Status: "Ongoing",
     Chapters: [
       { Title: "Chapter 1: The Drawing Room", Folder: "Chapters/Book6/Chapter1", Date: "2026-10-28" },
-      { Title: "Chapter 2: Perfectly Empty", Folder: "Chapters/Book6/Chapter2", Date: "2026-10-28" }
+      { Title: "Chapter 2: Perfectly Empty", Folder: "Chapters/Book6/Chapter2", Date: "2026-10-28" },
+      { Title: "Chapter 3: The Man in the Armchair", Folder: "Chapters/Book6/Chapter3", Date: "2026-10-28" },
+      { Title: "Chapter 4: Borgin and Burkes", Folder: "Chapters/Book6/Chapter4", Date: "2026-10-28" },
+      { Title: "Chapter 5: The Cello", Folder: "Chapters/Book6/Chapter5", Date: "2026-10-28" },
+      { Title: "Chapter 6: A Stranger on The Train", Folder: "Chapters/Book6/Chapter6", Date: "2026-10-28" },
+      { Title: "Chapter 7: Beneath the Cloak", Folder: "Chapters/Book6/Chapter7", Date: "2026-10-28" },
+      { Title: "Chapter 8: Nothing in My Pocket", Folder: "Chapters/Book6/Chapter8", Date: "2026-10-28" }
     ]
   }
 ];

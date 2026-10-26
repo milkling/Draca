@@ -72,6 +72,20 @@ function IsAdmin(Context, Body) {
   return !!Secret && typeof Body.admin === "string" && Body.admin === Secret;
 }
 
+async function CommentKeys(Store) {
+  var Found = [];
+  var Cursor = undefined;
+  for (var Round = 0; Round < 10; Round++) {
+    var Page = await Store.list({ prefix: "c", cursor: Cursor });
+    Page.keys.forEach(function (Each) {
+      if (KeyPattern.test(Each.name.slice(1))) Found.push(Each.name.slice(1));
+    });
+    if (Page.list_complete) break;
+    Cursor = Page.cursor;
+  }
+  return Found.slice(0, 400);
+}
+
 function CleanText(Value) {
   return String(Value || "").replace(/\r/g, "").trim();
 }
@@ -145,23 +159,36 @@ export async function onRequestPost(Context) {
 
   if (Action === "all") {
     if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
-    var Found = [];
-    var Cursor = undefined;
-    for (var Round = 0; Round < 10; Round++) {
-      var Page = await Store.list({ prefix: "c", cursor: Cursor });
-      Page.keys.forEach(function (Each) {
-        if (KeyPattern.test(Each.name.slice(1))) Found.push(Each.name.slice(1));
-      });
-      if (Page.list_complete) break;
-      Cursor = Page.cursor;
-    }
-    Found = Found.slice(0, 400);
+    var Found = await CommentKeys(Store);
     var Chapters = {};
     await Promise.all(Found.map(async function (Each) {
       var Rows = await ReadList(Store, Each);
       if (Rows.length) Chapters[Each] = Rows.map(Publish);
     }));
     return Reply({ chapters: Chapters });
+  }
+
+  if (Action === "activity") {
+    if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
+    var Since = Number(Body.since) || 0;
+    var Listed = await CommentKeys(Store);
+    var Fresh = [];
+    await Promise.all(Listed.map(async function (Each) {
+      var Rows2 = await ReadList(Store, Each);
+      Rows2.forEach(function (Row2) {
+        if (Row2.time > Since && !Row2.author) {
+          Fresh.push({ key: Each, id: Row2.id, name: Row2.name, text: Row2.text.slice(0, 140), time: Row2.time });
+        }
+      });
+    }));
+    Fresh.sort(function (A, B) { return B.time - A.time; });
+    var Asked = (Array.isArray(Body.keys) ? Body.keys : []).filter(function (Each) { return KeyPattern.test(String(Each)); }).slice(0, 200);
+    var Likes = {};
+    await Promise.all(Asked.map(async function (Each) {
+      var Count = parseInt(await Store.get("l" + Each), 10) || 0;
+      if (Count > 0) Likes[Each] = Count;
+    }));
+    return Reply({ now: Date.now(), newComments: Fresh.length, comments: Fresh.slice(0, 20), likes: Likes });
   }
 
   if (Action === "login") {

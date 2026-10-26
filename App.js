@@ -1107,6 +1107,109 @@ function RenderChapter(Index) {
   window.scrollTo(0, 0);
 }
 
+var ActivityNow = null;
+var ActivityBusy = null;
+
+function ReadSeen() {
+  try { return JSON.parse(StorageGet("AuthorSeen") || "null"); } catch (Failure) { return null; }
+}
+
+function ChapterLabel(Key) {
+  var Found = All.filter(function (Item) { return Item.Key === Key; })[0];
+  if (!Found) return Key;
+  return Found.Book.Title.split(":")[0] + " \u00b7 " + Found.Chapter.Title;
+}
+
+function HideAuthorBanner() {
+  var Old = document.getElementById("AuthorBanner");
+  if (Old) Old.remove();
+}
+
+function MarkActivitySeen() {
+  if (ActivityNow) {
+    StorageSet("AuthorSeen", JSON.stringify({ time: ActivityNow.now, likes: ActivityNow.likes }));
+  }
+  ActivityNow = null;
+  HideAuthorBanner();
+}
+
+function ShowAuthorBanner() {
+  HideAuthorBanner();
+  if (!ActivityNow || location.hash === "#Comments") return;
+  var Bits = [];
+  if (ActivityNow.newComments) Bits.push(ActivityNow.newComments + (ActivityNow.newComments === 1 ? " new comment" : " new comments"));
+  if (ActivityNow.likeTotal) Bits.push(ActivityNow.likeTotal + (ActivityNow.likeTotal === 1 ? " new like" : " new likes"));
+  if (!Bits.length) return;
+  var Banner = document.createElement("div");
+  Banner.id = "AuthorBanner";
+  var Words = document.createElement("span");
+  Words.textContent = Bits.join(" and ") + " since you last looked.";
+  var View = document.createElement("button");
+  View.textContent = "View";
+  View.onclick = function () { location.hash = "#Comments"; };
+  var Close = document.createElement("button");
+  Close.textContent = "\u00d7";
+  Close.className = "Dismiss";
+  Close.onclick = MarkActivitySeen;
+  Banner.appendChild(Words);
+  Banner.appendChild(View);
+  Banner.appendChild(Close);
+  document.body.appendChild(Banner);
+}
+
+function NotifyActivity() {
+  try {
+    if (!("Notification" in window) || Notification.permission !== "granted" || !ActivityNow) return;
+    var Told = StorageGet("AuthorNotified");
+    var Tag = ActivityNow.newComments + ":" + ActivityNow.likeTotal;
+    if (Told === Tag) return;
+    StorageSet("AuthorNotified", Tag);
+    var Bits = [];
+    if (ActivityNow.newComments) Bits.push(ActivityNow.newComments + " new comments");
+    if (ActivityNow.likeTotal) Bits.push(ActivityNow.likeTotal + " new likes");
+    var Note = new Notification(SiteInfo.Title, { body: Bits.join(", ") });
+    Note.onclick = function () { window.focus(); location.hash = "#Comments"; };
+  } catch (Failure) {
+  }
+}
+
+function CheckActivity(Force) {
+  var Secret = GetAuthorKey();
+  if (!Secret) return Promise.resolve(null);
+  if (ActivityBusy) return ActivityBusy;
+  var Last = parseInt(StorageGet("AuthorChecked"), 10) || 0;
+  if (!Force && Date.now() - Last < 240000) {
+    ShowAuthorBanner();
+    return Promise.resolve(ActivityNow);
+  }
+  StorageSet("AuthorChecked", String(Date.now()));
+  var Seen = ReadSeen();
+  ActivityBusy = PostJson("/api/Comments", { action: "activity", admin: Secret, since: Seen ? Seen.time : 0, keys: AllKeys() }).then(function (Data) {
+    ActivityBusy = null;
+    if (typeof Data.now !== "number") return null;
+    if (!Seen) {
+      StorageSet("AuthorSeen", JSON.stringify({ time: Data.now, likes: Data.likes }));
+      return null;
+    }
+    var Delta = {};
+    var Total = 0;
+    Object.keys(Data.likes).forEach(function (Key) {
+      var Gain = Data.likes[Key] - ((Seen.likes || {})[Key] || 0);
+      if (Gain > 0) { Delta[Key] = Gain; Total += Gain; }
+    });
+    ActivityNow = { now: Data.now, newComments: Data.newComments, comments: Data.comments, likes: Data.likes, likeDelta: Delta, likeTotal: Total, since: Seen.time };
+    if (!ActivityNow.newComments && !ActivityNow.likeTotal) {
+      StorageSet("AuthorSeen", JSON.stringify({ time: Data.now, likes: Data.likes }));
+      ActivityNow = null;
+      return null;
+    }
+    ShowAuthorBanner();
+    NotifyActivity();
+    return ActivityNow;
+  });
+  return ActivityBusy;
+}
+
 function RenderAuthor() {
   CloseBook();
   StopWatchingScroll();
@@ -1128,6 +1231,17 @@ function RenderAuthor() {
       location.hash = "#";
     };
     Wrap.appendChild(Go);
+    if ("Notification" in window) {
+      var Alert = Make("button", "CommentSubmit", Notification.permission === "granted" ? "Browser notifications are on" : "Turn on browser notifications");
+      Alert.type = "button";
+      Alert.onclick = function () {
+        Notification.requestPermission().then(function (Result) {
+          Alert.textContent = Result === "granted" ? "Browser notifications are on" : "Notifications were blocked in this browser";
+        });
+      };
+      Wrap.appendChild(Alert);
+      Wrap.appendChild(Make("p", "CommentStatus", "Notifications only appear while the site is open in a tab or in the background. When you reopen the site you always get a banner instead."));
+    }
     Wrap.appendChild(Out);
     App.appendChild(Wrap);
     return;
@@ -1198,16 +1312,29 @@ function RenderAllComments() {
   App.appendChild(Wrap);
 
   var Data = null;
+  var SeenBefore = ReadSeen();
+  var Since = SeenBefore ? SeenBefore.time : Infinity;
+  var Panel = Make("div", "ModActivity");
+  Wrap.insertBefore(Panel, Bar);
 
   function Say(Text, Bad) {
     Status.textContent = Text || "";
     Status.className = "CommentStatus" + (Bad ? " Bad" : "");
   }
 
-  function Label(Key) {
-    var Found = All.filter(function (Item) { return Item.Key === Key; })[0];
-    if (!Found) return Key;
-    return Found.Book.Title.split(":")[0] + " \u00b7 " + Found.Chapter.Title;
+  var Label = ChapterLabel;
+
+  function ShowActivity(Info) {
+    Panel.innerHTML = "";
+    if (!Info) return;
+    Panel.appendChild(Make("strong", "", "Since you last looked"));
+    var Lines = [];
+    if (Info.newComments) Lines.push(Info.newComments + (Info.newComments === 1 ? " new comment" : " new comments"));
+    if (Info.likeTotal) Lines.push(Info.likeTotal + (Info.likeTotal === 1 ? " new like" : " new likes"));
+    Panel.appendChild(Make("div", "", Lines.join(" and ")));
+    Object.keys(Info.likeDelta).forEach(function (Key) {
+      Panel.appendChild(Make("div", "ModLikeLine", "\u2665 +" + Info.likeDelta[Key] + "  " + Label(Key)));
+    });
   }
 
   function FillPicker(Keep) {
@@ -1249,6 +1376,7 @@ function RenderAllComments() {
       var Where = Make("a", "ModWhere", Label(Row.Key));
       Where.href = "#" + Row.Key;
       Wrapper.appendChild(Where);
+      if (Row.Item.time > Since && !Row.Item.author) Where.appendChild(Make("span", "ModNew", "New"));
       Wrapper.appendChild(CommentCard(Row.Item, {
         Key: Row.Key,
         Say: Say,
@@ -1266,7 +1394,10 @@ function RenderAllComments() {
 
   function Load() {
     Say("Loading...", false);
-    PostJson("/api/Comments", { action: "all", admin: GetAuthorKey() }).then(function (Result) {
+    CheckActivity(true).then(function (Info) {
+      ShowActivity(Info);
+      return PostJson("/api/Comments", { action: "all", admin: GetAuthorKey() });
+    }).then(function (Result) {
       if (!Result.chapters) {
         if (Result.error === "BadAdmin") {
           StorageSet("AuthorKey", null);
@@ -1280,6 +1411,7 @@ function RenderAllComments() {
       Data = Result.chapters;
       FillPicker(Pick.value);
       Draw();
+      MarkActivitySeen();
     });
   }
 
@@ -1360,3 +1492,15 @@ document.addEventListener("visibilitychange", function () {
   if (document.visibilityState === "visible") CheckForUpdate();
 });
 window.addEventListener("focus", CheckForUpdate);
+
+if (GetAuthorKey()) {
+  CheckActivity(false);
+  setInterval(function () { if (document.visibilityState === "visible") CheckActivity(false); }, 600000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible") CheckActivity(false);
+  });
+  window.addEventListener("hashchange", function () {
+    if (location.hash === "#Comments") HideAuthorBanner();
+    else ShowAuthorBanner();
+  });
+}

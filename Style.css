@@ -681,3 +681,51 @@ body.ModalOpen { overflow: hidden; }
 .ModEntry { display: flex; flex-direction: column; gap: 4px; }
 .ModWhere { font-size: 12px; font-weight: 600; color: var(--Soft); }
 .ModWhere:hover { color: var(--Accent); text-decoration: underline; }
+
+#AuthorBanner {
+  position: fixed;
+  left: 50%;
+  bottom: 66px;
+  transform: translateX(-50%);
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 24px);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--Fg);
+  color: var(--Bg);
+  box-shadow: var(--Shadow);
+  font-size: 14px;
+}
+#AuthorBanner button {
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: var(--Accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+#AuthorBanner button.Dismiss { background: none; color: inherit; padding: 2px 6px; font-size: 18px; line-height: 1; }
+.ModActivity:not(:empty) {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--Gold);
+  border-radius: 12px;
+  background: var(--Card);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ModLikeLine { color: var(--Soft); }
+.ModNew {
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--Accent);
+  color: #fff;
+  font-size: 10px;
+}

@@ -140,7 +140,7 @@ export async function onRequestPost(Context) {
   if (Action === "adminlogin") {
     if (!(await Cooldown(Context, Store, 3))) return Reply({ error: "Slow" }, 429);
     if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
-    return Reply({ ok: true, name: Context.env.AuthorName || "Inachane" });
+    return Reply({ ok: true, name: Context.env.AuthorName || "inachane" });
   }
 
   if (Action === "all") {
@@ -182,7 +182,7 @@ export async function onRequestPost(Context) {
     var AsAuthor = false;
     if (Body.admin) {
       if (!IsAdmin(Context, Body)) return Reply({ error: "BadAdmin" }, 401);
-      Name = Context.env.AuthorName || "Inachane";
+      Name = Context.env.AuthorName || "inachane";
       Member = true;
       AsAuthor = true;
     } else if (Body.name) {

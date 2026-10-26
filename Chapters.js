@@ -1,7 +1,7 @@
 var SiteInfo = {
   Title: "Draca",
   Tagline: "A Harry Potter retelling. Written by inachane.",
-  AuthorName: "Inachane",
+  AuthorName: "inachane",
   Cover: "Cover.png",
   OriginalText: "Read the original novel on Wattpad",
   OriginalUrl: "https://www.wattpad.com/user/IUSarde"

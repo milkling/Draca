@@ -172,6 +172,9 @@ var Books = [
     Title: "Book 6: The Half-Blood Prince",
     Cover: "Chapters/Book6/CoverArt.jpg",
     Status: "Ongoing",
-    Chapters: []
+    Chapters: [
+      { Title: "Chapter 1: The Drawing Room", Folder: "Chapters/Book6/Chapter1", Date: "2026-10-28" },
+      { Title: "Chapter 2: Perfectly Empty", Folder: "Chapters/Book6/Chapter2", Date: "2026-10-28" }
+    ]
   }
 ];

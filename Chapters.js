@@ -124,6 +124,7 @@ var Books = [
     Title: "Book 5: The Order of the Phoenix",
     Cover: "Chapters/Book5/CoverArt.jpg",
     Status: "Complete",
+    OriginalUrl: "https://www.wattpad.com/story/417170404-draca-malfoy-and-the-order-of-the-phoenix",
     Chapters: [
       { Title: "Chapter 1: Letters on Tuesdays", Folder: "Chapters/Book5/Chapter1", Date: "2026-10-22" },
       { Title: "Chapter 2: A Very Cold Sea", Folder: "Chapters/Book5/Chapter2", Date: "2026-10-22" },
@@ -165,5 +166,11 @@ var Books = [
       { Title: "Chapter 38: What Was Left", Folder: "Chapters/Book5/Chapter38", Date: "2026-10-28" },
       { Title: "Chapter 39: Hello, My Dear", Folder: "Chapters/Book5/Chapter39", Date: "2026-10-28" }
     ]
+  },
+  {
+    Title: "Book 6: The Half-Blood Prince",
+    Cover: "Chapters/Book6/CoverArt.jpg",
+    Status: "Ongoing",
+    Chapters: []
   }
 ];

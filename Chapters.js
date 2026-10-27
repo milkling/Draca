@@ -187,6 +187,22 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter8/Music.mp3", Volume: 0.5 }
         ]
+      },
+      {
+        Title: "Chapter 9: Elimination",
+        Folder: "Chapters/Book6/Chapter9",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter9/Music.mp3", Volume: 0.5 }
+        ]
+      },
+      {
+        Title: "Chapter 10: Cold Stone",
+        Folder: "Chapters/Book6/Chapter10",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter9/Music.mp3", Volume: 0.5 }
+        ]
       }
     ]
   }

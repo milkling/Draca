@@ -209,7 +209,11 @@ var Books = [
       { Title: "Chapter 13: Terms", Folder: "Chapters/Book6/Chapter13", Date: "2026-10-29" },
       { Title: "Chapter 14: Four Crescents", Folder: "Chapters/Book6/Chapter14", Date: "2026-10-29" },
       { Title: "Chapter 15: Tuesdays", Folder: "Chapters/Book6/Chapter15", Date: "2026-10-29" },
-      { Title: "Chapter 16: Delivery", Folder: "Chapters/Book6/Chapter16", Date: "2026-10-29" }
+      { Title: "Chapter 16: Delivery", Folder: "Chapters/Book6/Chapter16", Date: "2026-10-29" },
+      { Title: "Chapter 17: The Promise", Folder: "Chapters/Book6/Chapter17", Date: "2026-10-29" },
+      { Title: "Chapter 18: Twelve Hours of Luck", Folder: "Chapters/Book6/Chapter18", Date: "2026-10-29" },
+      { Title: "Chapter 19: Oak-Matured", Folder: "Chapters/Book6/Chapter19", Date: "2026-10-29" },
+      { Title: "Chapter 20: The Doorway", Folder: "Chapters/Book6/Chapter20", Date: "2026-10-29" }
     ]
   }
 ];

@@ -180,7 +180,14 @@ var Books = [
       { Title: "Chapter 5: The Cello", Folder: "Chapters/Book6/Chapter5", Date: "2026-10-28" },
       { Title: "Chapter 6: A Stranger on The Train", Folder: "Chapters/Book6/Chapter6", Date: "2026-10-28" },
       { Title: "Chapter 7: Beneath the Cloak", Folder: "Chapters/Book6/Chapter7", Date: "2026-10-28" },
-      { Title: "Chapter 8: Nothing in My Pocket", Folder: "Chapters/Book6/Chapter8", Date: "2026-10-28" }
+      {
+        Title: "Chapter 8: Nothing in My Pocket",
+        Folder: "Chapters/Book6/Chapter8",
+        Date: "2026-10-28",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter8/Music.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

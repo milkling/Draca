@@ -203,7 +203,13 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter9/Music.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      { Title: "Chapter 11: The Prince's Margins", Folder: "Chapters/Book6/Chapter11", Date: "2026-10-29" },
+      { Title: "Chapter 12: A Dead Person's Work", Folder: "Chapters/Book6/Chapter12", Date: "2026-10-29" },
+      { Title: "Chapter 13: Terms", Folder: "Chapters/Book6/Chapter13", Date: "2026-10-29" },
+      { Title: "Chapter 14: Four Crescents", Folder: "Chapters/Book6/Chapter14", Date: "2026-10-29" },
+      { Title: "Chapter 15: Tuesdays", Folder: "Chapters/Book6/Chapter15", Date: "2026-10-29" },
+      { Title: "Chapter 16: Delivery", Folder: "Chapters/Book6/Chapter16", Date: "2026-10-29" }
     ]
   }
 ];

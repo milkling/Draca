@@ -258,6 +258,22 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter28/Music.mp3", Volume: 0.5 }
         ]
+      },
+      {
+        Title: "Chapter 29: An Open Offer",
+        Folder: "Chapters/Book6/Chapter29",
+        Date: "2026-11-01",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter29/Music.mp3", Volume: 0.5 }
+        ]
+      },
+      {
+        Title: "Chapter 30: The White Room",
+        Folder: "Chapters/Book6/Chapter30",
+        Date: "2026-11-01",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter30/Music.mp3", Volume: 0.5 }
+        ]
       }
     ]
   }

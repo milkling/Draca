@@ -213,7 +213,31 @@ var Books = [
       { Title: "Chapter 17: The Promise", Folder: "Chapters/Book6/Chapter17", Date: "2026-10-29" },
       { Title: "Chapter 18: Twelve Hours of Luck", Folder: "Chapters/Book6/Chapter18", Date: "2026-10-29" },
       { Title: "Chapter 19: Oak-Matured", Folder: "Chapters/Book6/Chapter19", Date: "2026-10-29" },
-      { Title: "Chapter 20: The Doorway", Folder: "Chapters/Book6/Chapter20", Date: "2026-10-29" }
+      { Title: "Chapter 20: The Doorway", Folder: "Chapters/Book6/Chapter20", Date: "2026-10-29" },
+      {
+        Title: "Chapter 21: The Correct Condition",
+        Folder: "Chapters/Book6/Chapter21",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter21/Music.mp3", Volume: 0.5 }
+        ]
+      },
+      {
+        Title: "Chapter 22: A Deficiency",
+        Folder: "Chapters/Book6/Chapter22",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter21/Music.mp3", Volume: 0.5 }
+        ]
+      },
+      {
+        Title: "Chapter 23: For Enemies",
+        Folder: "Chapters/Book6/Chapter23",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter21/Music.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

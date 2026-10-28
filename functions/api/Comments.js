@@ -1,4 +1,4 @@
-var KeyPattern = /^Book[0-9]{1,3}Chapter[0-9]{1,3}$/;
+var KeyPattern = /^(Book[0-9]{1,3}Chapter[0-9]{1,3}|Discussion)$/;
 var NamePattern = /^[A-Za-z0-9]{3,20}$/;
 var Reserved = ["anonymous", "admin", "author", "moderator", "inachane", "draca"];
 var MaxComments = 500;

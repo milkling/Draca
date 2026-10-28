@@ -1,5 +1,7 @@
 var App = document.getElementById("App");
 var Nav = document.getElementById("Nav");
+var SupportSlot = document.getElementById("SupportSlot");
+if (SupportSlot && SiteInfo.SupportUrl) SupportSlot.replaceWith(SupportLink("SupportTop"));
 
 var All = [];
 Books.forEach(function (Book, BookIndex) {
@@ -68,10 +70,18 @@ function FormatDate(Text) {
   return Value.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
+function SupportLink(ClassName) {
+  var Anchor = Make("a", ClassName, "\u2665 " + (SiteInfo.SupportText || "Support"));
+  Anchor.href = SiteInfo.SupportUrl || "#";
+  Anchor.target = "_blank";
+  Anchor.rel = "noopener";
+  return Anchor;
+}
+
 function DisclaimerBox() {
   var Box = Make("aside", "Disclaimer");
   Box.appendChild(Make("strong", "", "Disclaimer"));
-  Box.appendChild(Make("p", "", "All artwork on this site was generated with AI. The story itself was written entirely by me. This is a non-commercial fan work made for fun: I earn no money from it, with no ads, sales or donations. Harry Potter and all related characters and settings belong to J.K. Rowling and her publishers. No ownership is claimed and no infringement is intended."));
+  Box.appendChild(Make("p", "", "All artwork on this site was generated with AI. The story itself was written entirely by me. This is a non-commercial fan work made for fun, with no ads and nothing for sale. It is free to read, and the donations I take are optional and only go toward keeping the site running. Harry Potter and all related characters and settings belong to J.K. Rowling and her publishers. No ownership is claimed and no infringement is intended."));
   return Box;
 }
 
@@ -615,7 +625,13 @@ function RenderHome() {
 
   Wrap.appendChild(DisclaimerBox());
   Wrap.appendChild(Make("footer", "SiteFoot", "Draca \u00b7 written by inachane"));
-  App.appendChild(Wrap);
+  var Layout = Make("div", "HomeLayout");
+  var Side = Make("aside", "HomeSide");
+  Side.appendChild(Make("p", "SideIntro", "Talk about the books: theories, favorite moments, anything."));
+  Layout.appendChild(Side);
+  Layout.appendChild(Wrap);
+  App.appendChild(Layout);
+  AddComments({ Key: "Discussion" }, Side, "Discussion");
   window.scrollTo(0, 0);
 }
 
@@ -777,15 +793,16 @@ function CommentCard(Item, Options) {
   return Card;
 }
 
-function AddComments(Entry) {
-  var Box = Make("section", "Comments");
-  var Head = Make("h3", "CommentsHead", "Comments");
+function AddComments(Entry, Host, Heading) {
+  var Box = Make("section", Host ? "Comments Side" : "Comments");
+  var BaseHead = Heading || "Comments";
+  var Head = Make("h3", "CommentsHead", BaseHead);
   Box.appendChild(Head);
 
   var Account = Make("div", "CommentAccount");
   var Form = Make("form", "CommentForm");
   var Field = Make("textarea", "CommentField");
-  Field.placeholder = "Say something nice...";
+  Field.placeholder = Host ? "Join the discussion..." : "Say something nice...";
   Field.maxLength = 1000;
   Field.rows = 3;
   var Bar = Make("div", "CommentBar");
@@ -801,7 +818,7 @@ function AddComments(Entry) {
   Box.appendChild(Account);
   Box.appendChild(Form);
   Box.appendChild(ListBox);
-  App.appendChild(Box);
+  (Host || App).appendChild(Box);
 
   var Name = StorageGet("CommentName");
   var Token = StorageGet("CommentToken");
@@ -818,9 +835,9 @@ function AddComments(Entry) {
 
   function ShowList() {
     ListBox.innerHTML = "";
-    Head.textContent = Comments.length ? "Comments (" + Comments.length + ")" : "Comments";
+    Head.textContent = Comments.length ? BaseHead + " (" + Comments.length + ")" : BaseHead;
     if (!Comments.length) {
-      ListBox.appendChild(Make("div", "CommentEmpty", "No comments yet. Be the first!"));
+      ListBox.appendChild(Make("div", "CommentEmpty", Host ? "Nothing here yet. Start the conversation!" : "No comments yet. Be the first!"));
       return;
     }
     Comments.slice().reverse().forEach(function (Item) {
@@ -1100,6 +1117,7 @@ function RenderChapter(Index) {
   Foot.appendChild(Link("Previous chapter", PrevHref, HasPrev ? "" : "Off"));
   var Original = OriginalLink(Entry.Book.OriginalUrl, "Btn");
   if (Original) Foot.appendChild(Original);
+  if (SiteInfo.SupportUrl) Foot.appendChild(SupportLink("Btn SupportBtn"));
   Foot.appendChild(Link("Next chapter", NextHref, HasNext ? "" : "Off"));
   App.appendChild(Foot);
   App.appendChild(DisclaimerBox());
@@ -1115,6 +1133,7 @@ function ReadSeen() {
 }
 
 function ChapterLabel(Key) {
+  if (Key === "Discussion") return "Discussion board";
   var Found = All.filter(function (Item) { return Item.Key === Key; })[0];
   if (!Found) return Key;
   return Found.Book.Title.split(":")[0] + " \u00b7 " + Found.Chapter.Title;

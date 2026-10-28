@@ -58,7 +58,51 @@ button { font: inherit; }
   text-transform: uppercase;
   color: var(--Accent);
 }
-.Nav { display: flex; gap: 8px; }
+.Nav { display: flex; gap: 8px; margin-left: auto; }
+.SupportTop {
+  flex: none;
+  padding: 7px 14px;
+  border: 1px solid var(--Accent);
+  border-radius: 999px;
+  background: var(--Accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.15s, opacity 0.15s;
+}
+.SupportTop:hover { transform: translateY(-1px); opacity: 0.9; }
+.Btn.SupportBtn { border-color: var(--Accent); color: var(--Accent); font-weight: 600; }
+.HomeLayout {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 820px);
+  justify-content: center;
+  gap: 28px;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 16px;
+  align-items: start;
+}
+.HomeLayout .Home { margin: 0; padding: 0 0 56px; max-width: none; }
+.HomeSide {
+  position: sticky;
+  top: 68px;
+  max-height: calc(100vh - 84px);
+  overflow-y: auto;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--Line);
+  border-radius: 16px;
+  background: var(--Card);
+  box-shadow: var(--Shadow);
+}
+.SideIntro { margin: 0 0 4px; color: var(--Soft); font-size: 13px; }
+.Comments.Side { max-width: none; padding: 0; margin: 0; }
+.Comments.Side .CommentsHead { border-top: 0; padding-top: 0; font-size: 24px; margin-bottom: 10px; }
+@media (max-width: 980px) {
+  .HomeLayout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .HomeLayout .Home { order: 1; }
+  .HomeSide { order: 2; position: static; max-height: none; overflow: visible; margin: 0 0 48px; }
+}
 .Btn {
   padding: 7px 14px;
   border: 1px solid var(--Line);

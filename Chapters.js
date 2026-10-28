@@ -245,7 +245,10 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter21/Music.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      { Title: "Chapter 25: A Wish", Folder: "Chapters/Book6/Chapter25", Date: "2026-10-30" },
+      { Title: "Chapter 26: The Promise", Folder: "Chapters/Book6/Chapter26", Date: "2026-10-30" },
+      { Title: "Chapter 27: Locket", Folder: "Chapters/Book6/Chapter27", Date: "2026-10-30" }
     ]
   }
 ];

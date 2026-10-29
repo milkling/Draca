@@ -283,7 +283,11 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter32/Music.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      { Title: "Chapter 33: I'm Coming Too", Folder: "Chapters/Book6/Chapter33", Date: "2026-10-29" },
+      { Title: "Chapter 34: Leaving by Night", Folder: "Chapters/Book6/Chapter34", Date: "2026-10-29" },
+      { Title: "Chapter 35: Blackberry & Heather", Folder: "Chapters/Book6/Chapter35", Date: "2026-10-29" },
+      { Title: "Chapter 36: Keeping Watch", Folder: "Chapters/Book6/Chapter36", Date: "2026-10-29" }
     ]
   }
 ];

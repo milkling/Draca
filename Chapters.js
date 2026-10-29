@@ -274,6 +274,15 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book6/Chapter30/Music.mp3", Volume: 0.5 }
         ]
+      },
+      { Title: "Chapter 31: The Half-Blood Prince", Folder: "Chapters/Book6/Chapter31", Date: "2026-10-29" },
+      {
+        Title: "Chapter 32: Three Hours",
+        Folder: "Chapters/Book6/Chapter32",
+        Date: "2026-10-29",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter32/Music.mp3", Volume: 0.5 }
+        ]
       }
     ]
   }

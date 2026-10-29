@@ -173,7 +173,7 @@ var Books = [
   {
     Title: "Book 6: The Half-Blood Prince",
     Cover: "Chapters/Book6/CoverArt.jpg",
-    Status: "Ongoing",
+    Status: "Complete",
     Chapters: [
       { Title: "Chapter 1: The Drawing Room", Folder: "Chapters/Book6/Chapter1", Date: "2026-10-28" },
       { Title: "Chapter 2: Perfectly Empty", Folder: "Chapters/Book6/Chapter2", Date: "2026-10-28" },
@@ -287,7 +287,16 @@ var Books = [
       { Title: "Chapter 33: I'm Coming Too", Folder: "Chapters/Book6/Chapter33", Date: "2026-10-29" },
       { Title: "Chapter 34: Leaving by Night", Folder: "Chapters/Book6/Chapter34", Date: "2026-10-29" },
       { Title: "Chapter 35: Blackberry & Heather", Folder: "Chapters/Book6/Chapter35", Date: "2026-10-29" },
-      { Title: "Chapter 36: Keeping Watch", Folder: "Chapters/Book6/Chapter36", Date: "2026-10-29" }
+      { Title: "Chapter 36: Keeping Watch", Folder: "Chapters/Book6/Chapter36", Date: "2026-10-29" },
+      { Title: "Chapter 37: The Flat C", Folder: "Chapters/Book6/Chapter37", Date: "2026-10-30" },
+      {
+        Title: "Chapter 38: Nine Times",
+        Folder: "Chapters/Book6/Chapter38",
+        Date: "2026-10-30",
+        Music: [
+          { Page: 1, Src: "Chapters/Book6/Chapter38/Music.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

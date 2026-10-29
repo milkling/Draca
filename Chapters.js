@@ -174,6 +174,7 @@ var Books = [
     Title: "Book 6: The Half-Blood Prince",
     Cover: "Chapters/Book6/CoverArt.jpg",
     Status: "Complete",
+    OriginalUrl: "https://www.wattpad.com/story/417201015-draca-malfoy-and-the-halfblooded-prince",
     Chapters: [
       { Title: "Chapter 1: The Drawing Room", Folder: "Chapters/Book6/Chapter1", Date: "2026-10-28" },
       { Title: "Chapter 2: Perfectly Empty", Folder: "Chapters/Book6/Chapter2", Date: "2026-10-28" },
@@ -303,6 +304,7 @@ var Books = [
     Title: "Book 7: The Deathly Hallows",
     Cover: "Chapters/Book7/CoverArt.jpg",
     Status: "Coming Soon",
+    OriginalUrl: "https://www.wattpad.com/story/417205760-draca-malfoy-and-the-deathly-hallows",
     Chapters: []
   }
 ];

@@ -298,5 +298,11 @@ var Books = [
         ]
       }
     ]
+  },
+  {
+    Title: "Book 7: The Deathly Hallows",
+    Cover: "Chapters/Book7/CoverArt.jpg",
+    Status: "Coming Soon",
+    Chapters: []
   }
 ];

@@ -324,7 +324,8 @@ var Books = [
           { Page: 1, Src: "Chapters/Book7/Chapter4/Music.mp3", Volume: 0.5 }
         ]
       },
-      { Title: "Chapter 5: Wherever She Goes", Folder: "Chapters/Book7/Chapter5", Date: "2026-10-30" }
+      { Title: "Chapter 5: Wherever She Goes", Folder: "Chapters/Book7/Chapter5", Date: "2026-10-30" },
+      { Title: "Chapter 6: Not a Spoon", Folder: "Chapters/Book7/Chapter6", Date: "2026-10-30" }
     ]
   }
 ];

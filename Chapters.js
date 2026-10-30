@@ -308,7 +308,14 @@ var Books = [
     Chapters: [
       { Title: "Chapter 1: No Change", Folder: "Chapters/Book7/Chapter1", Date: "2026-10-30" },
       { Title: "Chapter 2: Somebody Ought to Say", Folder: "Chapters/Book7/Chapter2", Date: "2026-10-30" },
-      { Title: "Chapter 3: Twelve", Folder: "Chapters/Book7/Chapter3", Date: "2026-10-30" }
+      {
+        Title: "Chapter 3: Twelve",
+        Folder: "Chapters/Book7/Chapter3",
+        Date: "2026-10-30",
+        Music: [
+          { Page: 1, Src: "Chapters/Book7/Chapter3/Music.mp3", Volume: 0.5 }
+        ]
+      }
     ]
   }
 ];

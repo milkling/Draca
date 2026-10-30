@@ -325,7 +325,9 @@ var Books = [
         ]
       },
       { Title: "Chapter 5: Wherever She Goes", Folder: "Chapters/Book7/Chapter5", Date: "2026-10-30" },
-      { Title: "Chapter 6: Not a Spoon", Folder: "Chapters/Book7/Chapter6", Date: "2026-10-30" }
+      { Title: "Chapter 6: Not a Spoon", Folder: "Chapters/Book7/Chapter6", Date: "2026-10-30" },
+      { Title: "Chapter 7: It's Allowed", Folder: "Chapters/Book7/Chapter7", Date: "2026-10-30" },
+      { Title: "Chapter 8: Only Minding It", Folder: "Chapters/Book7/Chapter8", Date: "2026-10-30" }
     ]
   }
 ];

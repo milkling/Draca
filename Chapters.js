@@ -303,8 +303,12 @@ var Books = [
   {
     Title: "Book 7: The Deathly Hallows",
     Cover: "Chapters/Book7/CoverArt.jpg",
-    Status: "Coming Soon",
+    Status: "Ongoing",
     OriginalUrl: "https://www.wattpad.com/story/417205760-draca-malfoy-and-the-deathly-hallows",
-    Chapters: []
+    Chapters: [
+      { Title: "Chapter 1: No Change", Folder: "Chapters/Book7/Chapter1", Date: "2026-10-30" },
+      { Title: "Chapter 2: Somebody Ought to Say", Folder: "Chapters/Book7/Chapter2", Date: "2026-10-30" },
+      { Title: "Chapter 3: Twelve", Folder: "Chapters/Book7/Chapter3", Date: "2026-10-30" }
+    ]
   }
 ];

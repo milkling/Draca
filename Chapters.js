@@ -315,7 +315,16 @@ var Books = [
         Music: [
           { Page: 1, Src: "Chapters/Book7/Chapter3/Music.mp3", Volume: 0.5 }
         ]
-      }
+      },
+      {
+        Title: "Chapter 4: What We Can Carry",
+        Folder: "Chapters/Book7/Chapter4",
+        Date: "2026-10-30",
+        Music: [
+          { Page: 1, Src: "Chapters/Book7/Chapter4/Music.mp3", Volume: 0.5 }
+        ]
+      },
+      { Title: "Chapter 5: Wherever She Goes", Folder: "Chapters/Book7/Chapter5", Date: "2026-10-30" }
     ]
   }
 ];

@@ -3,6 +3,8 @@ var NamePattern = /^[A-Za-z0-9]{3,20}$/;
 var Reserved = ["anonymous", "admin", "author", "moderator", "inachane", "draca"];
 var MaxComments = 500;
 var MaxLength = 1000;
+var MaxVotes = 5000;
+var ViewerPattern = /^[md][A-Za-z0-9]{3,32}$/;
 
 function Reply(Body, Status) {
   return new Response(JSON.stringify(Body), {
@@ -52,8 +54,11 @@ async function Verify(Store, Name, Token) {
   return Given === User.hash ? User : null;
 }
 
-function Publish(Item) {
+function Publish(Item, Viewer) {
+  var Votes = Item.votes || [];
   return {
+    votes: Votes.length,
+    voted: !!Viewer && Votes.indexOf(Viewer) >= 0,
     id: Item.id,
     name: Item.name,
     text: Item.text,
@@ -128,7 +133,9 @@ export async function onRequestGet(Context) {
   var Key = Url.searchParams.get("key") || "";
   if (!KeyPattern.test(Key)) return Reply({ error: "BadKey" }, 400);
   var List = await ReadList(Store, Key);
-  return Reply({ comments: List.map(Publish) });
+  var Asked = Url.searchParams.get("viewer") || "";
+  var Viewer = ViewerPattern.test(Asked) ? (await Hash("v:" + Asked.toLowerCase())).slice(0, 16) : "";
+  return Reply({ comments: List.map(function (Each) { return Publish(Each, Viewer); }) });
 }
 
 export async function onRequestPost(Context) {
@@ -163,7 +170,7 @@ export async function onRequestPost(Context) {
     var Chapters = {};
     await Promise.all(Found.map(async function (Each) {
       var Rows = await ReadList(Store, Each);
-      if (Rows.length) Chapters[Each] = Rows.map(Publish);
+      if (Rows.length) Chapters[Each] = Rows.map(function (One) { return Publish(One, ""); });
     }));
     return Reply({ chapters: Chapters });
   }
@@ -249,6 +256,33 @@ export async function onRequestPost(Context) {
     var Kept = Current.filter(function (Entry) { return Entry.id !== Body.id; });
     await Store.put("c" + Key, JSON.stringify(Kept));
     return Reply({ ok: true });
+  }
+
+  if (Action === "vote") {
+    var Who = "";
+    if (Body.name) {
+      var Voter = await Verify(Store, String(Body.name).trim(), Body.token);
+      if (!Voter) return Reply({ error: "BadLogin" }, 401);
+      Who = "m" + Voter.name.toLowerCase();
+    } else if (ViewerPattern.test(String(Body.viewer || "")) && String(Body.viewer).charAt(0) === "d") {
+      Who = String(Body.viewer).toLowerCase();
+    } else {
+      return Reply({ error: "BadViewer" }, 400);
+    }
+    var VoterHash = (await Hash("v:" + Who)).slice(0, 16);
+    var Pool = await ReadList(Store, Key);
+    var Target2 = Pool.filter(function (Entry) { return Entry.id === Body.id; })[0];
+    if (!Target2) return Reply({ error: "Missing" }, 404);
+    Target2.votes = Target2.votes || [];
+    var Spot = Target2.votes.indexOf(VoterHash);
+    if (Spot >= 0) {
+      Target2.votes.splice(Spot, 1);
+    } else {
+      if (Target2.votes.length >= MaxVotes) return Reply({ error: "TooMany" }, 400);
+      Target2.votes.push(VoterHash);
+    }
+    await Store.put("c" + Key, JSON.stringify(Pool));
+    return Reply({ votes: Target2.votes.length, voted: Spot < 0 });
   }
 
   if (Action === "like" || Action === "reply" || Action === "unreply") {

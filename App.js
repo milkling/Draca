@@ -671,9 +671,25 @@ var CommentErrors = {
   TooLong: "That comment is too long.",
   Offline: "Could not reach the server.",
   NoStore: "Comments are not set up yet.",
+  BadViewer: "Could not tell who you are, try again.",
   BadAdmin: "That author key is not right, or AdminKey is not set in Cloudflare.",
   TooMany: "That comment already has the maximum number of replies."
 };
+
+function DeviceId() {
+  var Saved = StorageGet("DeviceId");
+  if (Saved && /^[A-Za-z0-9]{8,32}$/.test(Saved)) return Saved;
+  var Made = "";
+  var Chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for (var I = 0; I < 20; I++) Made += Chars.charAt(Math.floor(Math.random() * Chars.length));
+  StorageSet("DeviceId", Made);
+  return Made;
+}
+
+function ViewerId(Name) {
+  if (Name) return "m" + Name.toLowerCase();
+  return "d" + DeviceId();
+}
 
 function GetAuthorKey() {
   return StorageGet("AuthorKey") || "";
@@ -737,9 +753,31 @@ function CommentCard(Item, Options) {
     Card.appendChild(Thread);
   }
 
+  var Actions = Make("div", "CommentActions");
+  var Vote = Make("button", "CommentAct CommentVote" + (Item.voted ? " On" : ""), (Item.voted ? "\u2665 " : "\u2661 ") + (Item.votes || 0));
+  Vote.type = "button";
+  Vote.title = Item.voted ? "Remove your like" : "Like this comment";
+  Vote.onclick = function () {
+    Vote.disabled = true;
+    var Payload = { action: "vote", key: Options.Key, id: Item.id };
+    if (Options.Name && Options.Token) { Payload.name = Options.Name; Payload.token = Options.Token; }
+    else Payload.viewer = ViewerId("");
+    PostJson("/api/Comments", Payload).then(function (Data) {
+      if (typeof Data.votes === "number") {
+        Item.votes = Data.votes;
+        Item.voted = Data.voted;
+        Options.Changed();
+      } else {
+        Vote.disabled = false;
+        Options.Say(CommentErrors[Data.error] || "Something went wrong.", true);
+      }
+    });
+  };
+  Actions.appendChild(Vote);
+  Card.appendChild(Actions);
+
   if (AuthorKey) {
-    var Actions = Make("div", "CommentActions");
-    var Like = Make("button", "CommentAct" + (Item.liked ? " On" : ""), Item.liked ? "\u2665 Liked" : "\u2661 Like");
+    var Like = Make("button", "CommentAct" + (Item.liked ? " On" : ""), Item.liked ? "\u2665 Hearted" : "\u2661 Heart");
     Like.type = "button";
     Like.onclick = function () {
       Like.disabled = true;
@@ -757,7 +795,6 @@ function CommentCard(Item, Options) {
     Answer.type = "button";
     Actions.appendChild(Like);
     Actions.appendChild(Answer);
-    Card.appendChild(Actions);
 
     var Box = null;
     Answer.onclick = function () {
@@ -840,7 +877,10 @@ function AddComments(Entry, Host, Heading) {
       ListBox.appendChild(Make("div", "CommentEmpty", Host ? "Nothing here yet. Start the conversation!" : "No comments yet. Be the first!"));
       return;
     }
-    Comments.slice().reverse().forEach(function (Item) {
+    Comments.map(function (Item, Order) { return { Item: Item, Order: Order }; }).sort(function (A, B) {
+      var Diff = (B.Item.votes || 0) - (A.Item.votes || 0);
+      return Diff !== 0 ? Diff : B.Order - A.Order;
+    }).map(function (Pair) { return Pair.Item; }).forEach(function (Item) {
       ListBox.appendChild(CommentCard(Item, {
         Key: Entry.Key,
         Name: Name,
@@ -987,7 +1027,7 @@ function AddComments(Entry, Host, Heading) {
 
   ShowAccount();
   ListBox.appendChild(Make("div", "CommentEmpty", "Loading comments..."));
-  fetch("/api/Comments?key=" + Entry.Key, { cache: "no-store" })
+  fetch("/api/Comments?key=" + Entry.Key + "&viewer=" + ViewerId(Name), { cache: "no-store" })
     .then(function (Response) { return Response.ok ? Response.json() : null; })
     .catch(function () { return null; })
     .then(function (Data) {

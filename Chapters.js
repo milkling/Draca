@@ -327,7 +327,10 @@ var Books = [
       { Title: "Chapter 5: Wherever She Goes", Folder: "Chapters/Book7/Chapter5", Date: "2026-10-30" },
       { Title: "Chapter 6: Not a Spoon", Folder: "Chapters/Book7/Chapter6", Date: "2026-10-30" },
       { Title: "Chapter 7: It's Allowed", Folder: "Chapters/Book7/Chapter7", Date: "2026-10-30" },
-      { Title: "Chapter 8: Only Minding It", Folder: "Chapters/Book7/Chapter8", Date: "2026-10-30" }
+      { Title: "Chapter 8: Only Minding It", Folder: "Chapters/Book7/Chapter8", Date: "2026-10-30" },
+      { Title: "Chapter 9: Inventory", Folder: "Chapters/Book7/Chapter9", Date: "2026-10-31" },
+      { Title: "Chapter 10: Wotcher", Folder: "Chapters/Book7/Chapter10", Date: "2026-10-31" },
+      { Title: "Chapter 11: A Boy I Used to Know", Folder: "Chapters/Book7/Chapter11", Date: "2026-10-31" }
     ]
   }
 ];

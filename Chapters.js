@@ -338,7 +338,9 @@ var Books = [
       { Title: "Chapter 16: Twenty-one Days", Folder: "Chapters/Book7/Chapter16", Date: "2026-11-01" },
       { Title: "Chapter 17: Eleven Minutes", Folder: "Chapters/Book7/Chapter17", Date: "2026-11-01" },
       { Title: "Chapter 18: Day 134", Folder: "Chapters/Book7/Chapter18", Date: "2026-11-01" },
-      { Title: "Chapter 19: A Cold Morning", Folder: "Chapters/Book7/Chapter19", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter19/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 19: A Cold Morning", Folder: "Chapters/Book7/Chapter19", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter19/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 20: She Chose the Sea", Folder: "Chapters/Book7/Chapter20", Date: "2026-11-01" },
+      { Title: "Chapter 21: What I Didn't Say", Folder: "Chapters/Book7/Chapter21", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter21/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

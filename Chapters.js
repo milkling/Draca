@@ -330,7 +330,15 @@ var Books = [
       { Title: "Chapter 8: Only Minding It", Folder: "Chapters/Book7/Chapter8", Date: "2026-10-30" },
       { Title: "Chapter 9: Inventory", Folder: "Chapters/Book7/Chapter9", Date: "2026-10-31" },
       { Title: "Chapter 10: Wotcher", Folder: "Chapters/Book7/Chapter10", Date: "2026-10-31" },
-      { Title: "Chapter 11: A Boy I Used to Know", Folder: "Chapters/Book7/Chapter11", Date: "2026-10-31" }
+      { Title: "Chapter 11: A Boy I Used to Know", Folder: "Chapters/Book7/Chapter11", Date: "2026-10-31" },
+      { Title: "Chapter 12: What Is Left", Folder: "Chapters/Book7/Chapter12", Date: "2026-11-01" },
+      { Title: "Chapter 13: The Elf", Folder: "Chapters/Book7/Chapter13", Date: "2026-11-01" },
+      { Title: "Chapter 14: The Bravest Thing", Folder: "Chapters/Book7/Chapter14", Date: "2026-11-01" },
+      { Title: "Chapter 15: A Month", Folder: "Chapters/Book7/Chapter15", Date: "2026-11-01" },
+      { Title: "Chapter 16: Twenty-one Days", Folder: "Chapters/Book7/Chapter16", Date: "2026-11-01" },
+      { Title: "Chapter 17: Eleven Minutes", Folder: "Chapters/Book7/Chapter17", Date: "2026-11-01" },
+      { Title: "Chapter 18: Day 134", Folder: "Chapters/Book7/Chapter18", Date: "2026-11-01" },
+      { Title: "Chapter 19: A Cold Morning", Folder: "Chapters/Book7/Chapter19", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter19/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

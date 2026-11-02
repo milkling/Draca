@@ -340,7 +340,12 @@ var Books = [
       { Title: "Chapter 18: Day 134", Folder: "Chapters/Book7/Chapter18", Date: "2026-11-01" },
       { Title: "Chapter 19: A Cold Morning", Folder: "Chapters/Book7/Chapter19", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter19/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 20: She Chose the Sea", Folder: "Chapters/Book7/Chapter20", Date: "2026-11-01" },
-      { Title: "Chapter 21: What I Didn't Say", Folder: "Chapters/Book7/Chapter21", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter21/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 21: What I Didn't Say", Folder: "Chapters/Book7/Chapter21", Date: "2026-11-01", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter21/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 22: Polyjuice Potion", Folder: "Chapters/Book7/Chapter22", Date: "2026-11-02" },
+      { Title: "Chapter 23: Documentary Proof", Folder: "Chapters/Book7/Chapter23", Date: "2026-11-02" },
+      { Title: "Chapter 24: The Dock", Folder: "Chapters/Book7/Chapter24", Date: "2026-11-02" },
+      { Title: "Chapter 25: Lights Out", Folder: "Chapters/Book7/Chapter25", Date: "2026-11-02" },
+      { Title: "Chapter 26: One of Seven", Folder: "Chapters/Book7/Chapter26", Date: "2026-11-02" }
     ]
   }
 ];

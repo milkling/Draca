@@ -345,7 +345,13 @@ var Books = [
       { Title: "Chapter 23: Documentary Proof", Folder: "Chapters/Book7/Chapter23", Date: "2026-11-02" },
       { Title: "Chapter 24: The Dock", Folder: "Chapters/Book7/Chapter24", Date: "2026-11-02" },
       { Title: "Chapter 25: Lights Out", Folder: "Chapters/Book7/Chapter25", Date: "2026-11-02" },
-      { Title: "Chapter 26: One of Seven", Folder: "Chapters/Book7/Chapter26", Date: "2026-11-02" }
+      { Title: "Chapter 26: One of Seven", Folder: "Chapters/Book7/Chapter26", Date: "2026-11-02" },
+      { Title: "Chapter 27: Your Turn", Folder: "Chapters/Book7/Chapter27", Date: "2026-11-03" },
+      { Title: "Chapter 28: Dead Weight", Folder: "Chapters/Book7/Chapter28", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter28/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 29: Only Dark", Folder: "Chapters/Book7/Chapter29", Date: "2026-11-03" },
+      { Title: "Chapter 30: Eat Something", Folder: "Chapters/Book7/Chapter30", Date: "2026-11-03" },
+      { Title: "Chapter 31: The Mark in the Margin", Folder: "Chapters/Book7/Chapter31", Date: "2026-11-03" },
+      { Title: "Chapter 32: Somebody to Put the Kettle On", Folder: "Chapters/Book7/Chapter32", Date: "2026-11-03" }
     ]
   }
 ];

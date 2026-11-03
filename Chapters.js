@@ -351,7 +351,16 @@ var Books = [
       { Title: "Chapter 29: Only Dark", Folder: "Chapters/Book7/Chapter29", Date: "2026-11-03" },
       { Title: "Chapter 30: Eat Something", Folder: "Chapters/Book7/Chapter30", Date: "2026-11-03" },
       { Title: "Chapter 31: The Mark in the Margin", Folder: "Chapters/Book7/Chapter31", Date: "2026-11-03" },
-      { Title: "Chapter 32: Somebody to Put the Kettle On", Folder: "Chapters/Book7/Chapter32", Date: "2026-11-03" }
+      { Title: "Chapter 32: Somebody to Put the Kettle On", Folder: "Chapters/Book7/Chapter32", Date: "2026-11-03" },
+      { Title: "Chapter 33: For Whoever Needs It", Folder: "Chapters/Book7/Chapter33", Date: "2026-11-03" },
+      { Title: "Chapter 34: Bring the Boy", Folder: "Chapters/Book7/Chapter34", Date: "2026-11-03" },
+      { Title: "Chapter 35: Braid: Terrible", Folder: "Chapters/Book7/Chapter35", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter35/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 36: A Plate With a Cloth Over It", Folder: "Chapters/Book7/Chapter36", Date: "2026-11-03" },
+      { Title: "Chapter 37: Wanting", Folder: "Chapters/Book7/Chapter37", Date: "2026-11-03" },
+      { Title: "Chapter 38: Click", Folder: "Chapters/Book7/Chapter38", Date: "2026-11-03" },
+      { Title: "Chapter 39: What I'm Good At", Folder: "Chapters/Book7/Chapter39", Date: "2026-11-03" },
+      { Title: "Chapter 40: On Record", Folder: "Chapters/Book7/Chapter40", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter40/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 41: The Last Enemy", Folder: "Chapters/Book7/Chapter41", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter41/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

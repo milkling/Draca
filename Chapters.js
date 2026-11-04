@@ -360,7 +360,15 @@ var Books = [
       { Title: "Chapter 38: Click", Folder: "Chapters/Book7/Chapter38", Date: "2026-11-03" },
       { Title: "Chapter 39: What I'm Good At", Folder: "Chapters/Book7/Chapter39", Date: "2026-11-03" },
       { Title: "Chapter 40: On Record", Folder: "Chapters/Book7/Chapter40", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter40/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 41: The Last Enemy", Folder: "Chapters/Book7/Chapter41", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter41/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 41: The Last Enemy", Folder: "Chapters/Book7/Chapter41", Date: "2026-11-03", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter41/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 42: Holly, Eleven Inches", Folder: "Chapters/Book7/Chapter42", Date: "2026-11-04" },
+      { Title: "Chapter 43: By a Thread", Folder: "Chapters/Book7/Chapter43", Date: "2026-11-04" },
+      { Title: "Chapter 44: Silver", Folder: "Chapters/Book7/Chapter44", Date: "2026-11-04" },
+      { Title: "Chapter 45: An Appalling Stitch", Folder: "Chapters/Book7/Chapter45", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter45/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 46: Pans", Folder: "Chapters/Book7/Chapter46", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter46/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 47: The Vanishing of Draca Malfoy", Folder: "Chapters/Book7/Chapter47", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter47/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 48: Good Morning", Folder: "Chapters/Book7/Chapter48", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter48/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 49: Save Me", Folder: "Chapters/Book7/Chapter49", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter49/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

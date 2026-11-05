@@ -368,7 +368,14 @@ var Books = [
       { Title: "Chapter 46: Pans", Folder: "Chapters/Book7/Chapter46", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter46/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 47: The Vanishing of Draca Malfoy", Folder: "Chapters/Book7/Chapter47", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter47/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 48: Good Morning", Folder: "Chapters/Book7/Chapter48", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter48/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 49: Save Me", Folder: "Chapters/Book7/Chapter49", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter49/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 49: Save Me", Folder: "Chapters/Book7/Chapter49", Date: "2026-11-04", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter49/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 50: Four Colors of Ink", Folder: "Chapters/Book7/Chapter50", Date: "2026-11-05" },
+      { Title: "Chapter 51: The Thing in the Locket", Folder: "Chapters/Book7/Chapter51", Date: "2026-11-05" },
+      { Title: "Chapter 52: Soup, With Dumplings", Folder: "Chapters/Book7/Chapter52", Date: "2026-11-05" },
+      { Title: "Chapter 53: The Little Round Room", Folder: "Chapters/Book7/Chapter53", Date: "2026-11-05" },
+      { Title: "Chapter 54: Sentiment", Folder: "Chapters/Book7/Chapter54", Date: "2026-11-05" },
+      { Title: "Chapter 55: Seven Stones", Folder: "Chapters/Book7/Chapter55", Date: "2026-11-05" },
+      { Title: "Chapter 56: Flat C", Folder: "Chapters/Book7/Chapter56", Date: "2026-11-05", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter56/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

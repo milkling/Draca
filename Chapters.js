@@ -375,7 +375,16 @@ var Books = [
       { Title: "Chapter 53: The Little Round Room", Folder: "Chapters/Book7/Chapter53", Date: "2026-11-05" },
       { Title: "Chapter 54: Sentiment", Folder: "Chapters/Book7/Chapter54", Date: "2026-11-05" },
       { Title: "Chapter 55: Seven Stones", Folder: "Chapters/Book7/Chapter55", Date: "2026-11-05" },
-      { Title: "Chapter 56: Flat C", Folder: "Chapters/Book7/Chapter56", Date: "2026-11-05", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter56/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 56: Flat C", Folder: "Chapters/Book7/Chapter56", Date: "2026-11-05", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter56/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 57: The Lamp in the Window", Folder: "Chapters/Book7/Chapter57", Date: "2026-11-06" },
+      { Title: "Chapter 58: Practical", Folder: "Chapters/Book7/Chapter58", Date: "2026-11-06" },
+      { Title: "Chapter 59: Nargles", Folder: "Chapters/Book7/Chapter59", Date: "2026-11-06" },
+      { Title: "Chapter 60: I Cannot Say", Folder: "Chapters/Book7/Chapter60", Date: "2026-11-06" },
+      { Title: "Chapter 61: Taboo", Folder: "Chapters/Book7/Chapter61", Date: "2026-11-06" },
+      { Title: "Chapter 62: Adequate", Folder: "Chapters/Book7/Chapter62", Date: "2026-11-06" },
+      { Title: "Chapter 63: Dobby", Folder: "Chapters/Book7/Chapter63", Date: "2026-11-06" },
+      { Title: "Chapter 64: A Rota for Waiting", Folder: "Chapters/Book7/Chapter64", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter64/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 65: Forty-Five Minutes", Folder: "Chapters/Book7/Chapter65", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter65/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

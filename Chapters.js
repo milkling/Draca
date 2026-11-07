@@ -384,7 +384,9 @@ var Books = [
       { Title: "Chapter 62: Adequate", Folder: "Chapters/Book7/Chapter62", Date: "2026-11-06" },
       { Title: "Chapter 63: Dobby", Folder: "Chapters/Book7/Chapter63", Date: "2026-11-06" },
       { Title: "Chapter 64: A Rota for Waiting", Folder: "Chapters/Book7/Chapter64", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter64/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 65: Forty-Five Minutes", Folder: "Chapters/Book7/Chapter65", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter65/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 65: Forty-Five Minutes", Folder: "Chapters/Book7/Chapter65", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter65/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 66: Five Minutes", Folder: "Chapters/Book7/Chapter66", Date: "2026-11-07", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter66/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 67: Be Late", Folder: "Chapters/Book7/Chapter67", Date: "2026-11-07", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter67/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

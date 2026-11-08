@@ -386,7 +386,13 @@ var Books = [
       { Title: "Chapter 64: A Rota for Waiting", Folder: "Chapters/Book7/Chapter64", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter64/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 65: Forty-Five Minutes", Folder: "Chapters/Book7/Chapter65", Date: "2026-11-06", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter65/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 66: Five Minutes", Folder: "Chapters/Book7/Chapter66", Date: "2026-11-07", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter66/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 67: Be Late", Folder: "Chapters/Book7/Chapter67", Date: "2026-11-07", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter67/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 67: Be Late", Folder: "Chapters/Book7/Chapter67", Date: "2026-11-07", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter67/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 68: Hello", Folder: "Chapters/Book7/Chapter68", Date: "2026-11-08" },
+      { Title: "Chapter 69: The Shovel", Folder: "Chapters/Book7/Chapter69", Date: "2026-11-08" },
+      { Title: "Chapter 70: A Goblin's Patience", Folder: "Chapters/Book7/Chapter70", Date: "2026-11-08" },
+      { Title: "Chapter 71: Quiet", Folder: "Chapters/Book7/Chapter71", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter71/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 72: I'm Back", Folder: "Chapters/Book7/Chapter72", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter72/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 73: Stay", Folder: "Chapters/Book7/Chapter73", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter73/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

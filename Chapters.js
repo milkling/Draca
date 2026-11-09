@@ -394,7 +394,10 @@ var Books = [
       { Title: "Chapter 72: I'm Back", Folder: "Chapters/Book7/Chapter72", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter72/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 73: Stay", Folder: "Chapters/Book7/Chapter73", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter73/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 74: The Flat C", Folder: "Chapters/Book7/Chapter74", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter74/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 75: A Mother's Thing", Folder: "Chapters/Book7/Chapter75", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter75/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 75: A Mother's Thing", Folder: "Chapters/Book7/Chapter75", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter75/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 76: Nineteen Stairs", Folder: "Chapters/Book7/Chapter76", Date: "2026-11-09" },
+      { Title: "Chapter 77: Small Print", Folder: "Chapters/Book7/Chapter77", Date: "2026-11-09" },
+      { Title: "Chapter 78: I'd Like to Come", Folder: "Chapters/Book7/Chapter78", Date: "2026-11-09" }
     ]
   }
 ];

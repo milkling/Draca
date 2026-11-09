@@ -392,7 +392,9 @@ var Books = [
       { Title: "Chapter 70: A Goblin's Patience", Folder: "Chapters/Book7/Chapter70", Date: "2026-11-08" },
       { Title: "Chapter 71: Quiet", Folder: "Chapters/Book7/Chapter71", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter71/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 72: I'm Back", Folder: "Chapters/Book7/Chapter72", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter72/Music.mp3", Volume: 0.5 }] },
-      { Title: "Chapter 73: Stay", Folder: "Chapters/Book7/Chapter73", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter73/Music.mp3", Volume: 0.5 }] }
+      { Title: "Chapter 73: Stay", Folder: "Chapters/Book7/Chapter73", Date: "2026-11-08", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter73/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 74: The Flat C", Folder: "Chapters/Book7/Chapter74", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter74/Music.mp3", Volume: 0.5 }] },
+      { Title: "Chapter 75: A Mother's Thing", Folder: "Chapters/Book7/Chapter75", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter75/Music.mp3", Volume: 0.5 }] }
     ]
   }
 ];

@@ -397,7 +397,20 @@ var Books = [
       { Title: "Chapter 75: A Mother's Thing", Folder: "Chapters/Book7/Chapter75", Date: "2026-11-09", Music: [{ Page: 1, Src: "Chapters/Book7/Chapter75/Music.mp3", Volume: 0.5 }] },
       { Title: "Chapter 76: Nineteen Stairs", Folder: "Chapters/Book7/Chapter76", Date: "2026-11-09" },
       { Title: "Chapter 77: Small Print", Folder: "Chapters/Book7/Chapter77", Date: "2026-11-09" },
-      { Title: "Chapter 78: I'd Like to Come", Folder: "Chapters/Book7/Chapter78", Date: "2026-11-09" }
+      { Title: "Chapter 78: I'd Like to Come", Folder: "Chapters/Book7/Chapter78", Date: "2026-11-09" },
+      { Title: "Chapter 79: A Quarter-Tone", Folder: "Chapters/Book7/Chapter79", Date: "2026-11-13" },
+      { Title: "Chapter 80: The Box With a D in It", Folder: "Chapters/Book7/Chapter80", Date: "2026-11-13" },
+      { Title: "Chapter 81: Everywhere D. Is", Folder: "Chapters/Book7/Chapter81", Date: "2026-11-13" },
+      { Title: "Chapter 82: Everything We've Got", Folder: "Chapters/Book7/Chapter82", Date: "2026-11-13" },
+      { Title: "Chapter 83: Thief's Downfall", Folder: "Chapters/Book7/Chapter83", Date: "2026-11-13" },
+      { Title: "Chapter 84: Done", Folder: "Chapters/Book7/Chapter84", Date: "2026-11-13" },
+      { Title: "Chapter 85: The Small Print", Folder: "Chapters/Book7/Chapter85", Date: "2026-11-13" },
+      { Title: "Chapter 86: Three Notes", Folder: "Chapters/Book7/Chapter86", Date: "2026-11-13" },
+      { Title: "Chapter 87: Rain", Folder: "Chapters/Book7/Chapter87", Date: "2026-11-13" },
+      { Title: "Chapter 88: Equals", Folder: "Chapters/Book7/Chapter88", Date: "2026-11-13" },
+      { Title: "Chapter 89: Adequate", Folder: "Chapters/Book7/Chapter89", Date: "2026-11-13" },
+      { Title: "Chapter 90: More Than Adequate", Folder: "Chapters/Book7/Chapter90", Date: "2026-11-13" },
+      { Title: "Chapter 91: Dear Mum and Dad", Folder: "Chapters/Book7/Chapter91", Date: "2026-11-13" }
     ]
   }
 ];

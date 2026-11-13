@@ -189,7 +189,7 @@ export async function onRequestPost(Context) {
       });
     }));
     Fresh.sort(function (A, B) { return B.time - A.time; });
-    var Asked = (Array.isArray(Body.keys) ? Body.keys : []).filter(function (Each) { return KeyPattern.test(String(Each)); }).slice(0, 200);
+    var Asked = (Array.isArray(Body.keys) ? Body.keys : []).filter(function (Each) { return KeyPattern.test(String(Each)); }).slice(0, 600);
     var Likes = {};
     await Promise.all(Asked.map(async function (Each) {
       var Count = parseInt(await Store.get("l" + Each), 10) || 0;

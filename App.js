@@ -93,17 +93,32 @@ function CountsText(Data) {
   return Text;
 }
 
+function FetchChunks(Path, Keys, Pick) {
+  var Groups = [];
+  for (var Index = 0; Index < Keys.length; Index += 100) Groups.push(Keys.slice(Index, Index + 100));
+  return Promise.all(Groups.map(function (Group) {
+    return fetch(Path + "?keys=" + Group.join(","), { cache: "no-store" })
+      .then(function (Response) { return Response.ok ? Response.json() : null; })
+      .then(function (Data) { return Data ? Pick(Data) : null; })
+      .catch(function () { return null; });
+  })).then(function (Parts) {
+    var Merged = {};
+    var Any = false;
+    Parts.forEach(function (Part) {
+      if (!Part) return;
+      Any = true;
+      Object.keys(Part).forEach(function (Name) { Merged[Name] = Part[Name]; });
+    });
+    return Any ? Merged : null;
+  });
+}
+
 function ReadCommentCounts(Keys) {
-  return fetch("/api/Comments?keys=" + Keys.join(","), { cache: "no-store" })
-    .then(function (Response) { return Response.ok ? Response.json() : null; })
-    .then(function (Data) { return Data && Data.counts ? Data.counts : null; })
-    .catch(function () { return null; });
+  return FetchChunks("/api/Comments", Keys, function (Data) { return Data.counts || null; });
 }
 
 function ReadStats(Keys) {
-  return fetch("/api/Stats?keys=" + Keys.join(","), { cache: "no-store" })
-    .then(function (Response) { return Response.ok ? Response.json() : null; })
-    .catch(function () { return null; });
+  return FetchChunks("/api/Stats", Keys, function (Data) { return Data; });
 }
 
 function PostStat(Key, Action) {

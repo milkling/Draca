@@ -410,7 +410,30 @@ var Books = [
       { Title: "Chapter 88: Equals", Folder: "Chapters/Book7/Chapter88", Date: "2026-11-13" },
       { Title: "Chapter 89: Adequate", Folder: "Chapters/Book7/Chapter89", Date: "2026-11-13" },
       { Title: "Chapter 90: More Than Adequate", Folder: "Chapters/Book7/Chapter90", Date: "2026-11-13" },
-      { Title: "Chapter 91: Dear Mum and Dad", Folder: "Chapters/Book7/Chapter91", Date: "2026-11-13" }
+      { Title: "Chapter 91: Dear Mum and Dad", Folder: "Chapters/Book7/Chapter91", Date: "2026-11-13" },
+      { Title: "Chapter 92: Nine Hats", Folder: "Chapters/Book7/Chapter92", Date: "2026-11-23" },
+      { Title: "Chapter 93: Odds and Ends", Folder: "Chapters/Book7/Chapter93", Date: "2026-11-23" },
+      { Title: "Chapter 94: It Is a Rumor", Folder: "Chapters/Book7/Chapter94", Date: "2026-11-23" },
+      { Title: "Chapter 95: A Lot of Yellow", Folder: "Chapters/Book7/Chapter95", Date: "2026-11-23" },
+      { Title: "Chapter 96: The Tenth Hat", Folder: "Chapters/Book7/Chapter96", Date: "2026-11-23" },
+      { Title: "Chapter 97: Eleven Rules", Folder: "Chapters/Book7/Chapter97", Date: "2026-11-23" },
+      { Title: "Chapter 98: Rule Twelve", Folder: "Chapters/Book7/Chapter98", Date: "2026-11-23" },
+      { Title: "Chapter 99: He Knows", Folder: "Chapters/Book7/Chapter99", Date: "2026-11-23" },
+      { Title: "Chapter 100: In Tune", Folder: "Chapters/Book7/Chapter100", Date: "2026-11-23" },
+      { Title: "Chapter 101: A Way In", Folder: "Chapters/Book7/Chapter101", Date: "2026-11-23" },
+      { Title: "Chapter 102: It's My Mud", Folder: "Chapters/Book7/Chapter102", Date: "2026-11-23" },
+      { Title: "Chapter 103: On a Hat", Folder: "Chapters/Book7/Chapter103", Date: "2026-11-23" },
+      { Title: "Chapter 104: One Spell", Folder: "Chapters/Book7/Chapter104", Date: "2026-11-23" },
+      { Title: "Chapter 105: It's a Draft", Folder: "Chapters/Book7/Chapter105", Date: "2026-11-23" },
+      { Title: "Chapter 106: Counting Heads", Folder: "Chapters/Book7/Chapter106", Date: "2026-11-23" },
+      { Title: "Chapter 107: I'd Suggest Practice", Folder: "Chapters/Book7/Chapter107", Date: "2026-11-23" },
+      { Title: "Chapter 108: Now", Folder: "Chapters/Book7/Chapter108", Date: "2026-11-23" },
+      { Title: "Chapter 109: A Shape", Folder: "Chapters/Book7/Chapter109", Date: "2026-11-23" },
+      { Title: "Chapter 110: Somebody's Come", Folder: "Chapters/Book7/Chapter110", Date: "2026-11-23" },
+      { Title: "Chapter 111: That's an Ugly Hat", Folder: "Chapters/Book7/Chapter111", Date: "2026-11-23" },
+      { Title: "Chapter 112: Nineteen Minutes", Folder: "Chapters/Book7/Chapter112", Date: "2026-11-23" },
+      { Title: "Chapter 113: Careful", Folder: "Chapters/Book7/Chapter113", Date: "2026-11-23" },
+      { Title: "Chapter 114: I'm Here", Folder: "Chapters/Book7/Chapter114", Date: "2026-11-23" }
     ]
   }
 ];
